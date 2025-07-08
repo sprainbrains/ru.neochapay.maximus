@@ -1,0 +1,24 @@
+TARGET = ru.neochapay.maximus
+
+CONFIG += \
+    auroraapp
+
+INCLUDEPATH += ../libs/qtwebsockets5 \
+               ../libs/qmaxmessenger
+
+LIBS += -L../libs/qtwebsockets5 -lqtwebsockets \
+        -L../libs/qmaxmessenger/ -lqmaxmessenger
+
+SOURCES += \
+    main.cpp
+
+DISTFILES += \
+    qml/* \
+    qml/pages/* \
+    qml/covers/* \
+    qml/components/*
+
+AURORAAPP_ICONS = 86x86 108x108 128x128 172x172 256x256
+
+CONFIG += auroraapp_i18n
+

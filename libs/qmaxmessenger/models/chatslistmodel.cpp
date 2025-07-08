@@ -1,0 +1,110 @@
+/*
+ * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "chatslistmodel.h"
+
+#include <QJsonArray>
+
+ChatsListModel::ChatsListModel(QObject *parent)
+    : QAbstractListModel{parent}
+    , m_messQueue(MessagesQueue::instance())
+{
+    connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
+        if(message.opcode() == 19) {
+            loadChatsList(message.payload());
+        }
+    });
+
+    m_hash.insert(Qt::UserRole, QByteArray("chatId"));
+    m_hash.insert(Qt::UserRole + 1, QByteArray("title"));
+    m_hash.insert(Qt::UserRole + 2, QByteArray("chatDescription"));
+    m_hash.insert(Qt::UserRole + 3, QByteArray("lastMessageTime"));
+    m_hash.insert(Qt::UserRole + 4, QByteArray("chatIcon"));
+    m_hash.insert(Qt::UserRole + 5, QByteArray("lastEventTime"));
+}
+
+int ChatsListModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return m_chats.count();
+}
+
+QVariant ChatsListModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    if (index.row() >= m_chats.size()) {
+        return QVariant();
+    }
+
+    Chat* item = m_chats.at(index.row());
+    Contact participant;
+    if(item->type() == Chat::DIALOG && item->participants().count() > 0) {
+        participant = item->participants().first();
+    }
+    if (role == Qt::UserRole) {
+        return item->chatId();
+    } else if (role == Qt::UserRole + 1) {
+        if(item->type() == Chat::CHAT) {
+            return item->chatTitle();
+        }
+        if(item->type() == Chat::DIALOG) {
+            if(participant.userId() > 0) {
+                return participant.firstName();
+            }
+        }
+        return "Unknow user";
+    } else if (role == Qt::UserRole + 2) {
+        return item->messages().last()->text();
+    } else if (role == Qt::UserRole + 3) {
+        return item->messages().last()->messageTime();
+    } else if (role == Qt::UserRole + 4) {
+        if(item->type() == Chat::CHAT) {
+            return item->baseRawIconUrl();
+        }
+        if(item->type() == Chat::DIALOG) {
+            if(participant.userId() > 0) {
+                return participant.baseRawUrl();
+            }
+        }
+        return QVariant();
+    } else if (role == Qt::UserRole + 5) {
+        return item->lastEventTime();
+    }
+
+    return QVariant();
+}
+
+void ChatsListModel::loadChatsList(QJsonObject payload)
+{
+    QJsonArray chats = payload["chats"].toArray();
+    if(chats.count() == 0) {
+        qWarning() << Q_FUNC_INFO << "Chats list is empty";
+        return;
+    }
+    beginResetModel();
+    foreach (QJsonValue cht, chats) {
+        Chat* chat = new Chat(cht.toObject());
+        m_chats.push_back(chat);
+    }
+
+    endResetModel();
+}
