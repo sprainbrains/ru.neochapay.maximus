@@ -40,6 +40,7 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     m_hash.insert(Qt::UserRole, QByteArray("messageIcon"));
     m_hash.insert(Qt::UserRole+1, QByteArray("messageName"));
     m_hash.insert(Qt::UserRole+2, QByteArray("messageText"));
+    m_hash.insert(Qt::UserRole+3, QByteArray("messageType"));
 }
 
 ChatMessagesModel::~ChatMessagesModel()
@@ -74,6 +75,8 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
         } else {
             return item->text();
         }
+    } else if (role == Qt::UserRole +3) {
+        return item->messageType();
     }
 
     return QVariant();

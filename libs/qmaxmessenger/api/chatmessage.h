@@ -33,6 +33,7 @@ class ChatMessage : public QObject
     Q_PROPERTY(QDateTime messageTime READ messageTime NOTIFY chatMessageChanged FINAL)
     Q_PROPERTY(QString text READ text NOTIFY chatMessageChanged FINAL)
     Q_PROPERTY(QList<ChatMessageElement> elements READ elements NOTIFY chatMessageChanged FINAL)
+    Q_PROPERTY(MessageType messageType READ messageType NOTIFY chatMessageChanged FINAL)
 
     // TODO:
     // type
@@ -46,6 +47,13 @@ public:
         int length;
     };
 
+    enum MessageType{
+        UnknowMessageType,
+        TextMessage,
+        ControlMessage,
+    };
+    Q_ENUMS(MessageType)
+
     explicit ChatMessage(QObject *parent = nullptr);
     explicit ChatMessage(QJsonObject chatMessageObject, QObject *parent = nullptr);
     ChatMessage(const ChatMessage& other, QObject *parent = nullptr);
@@ -55,8 +63,8 @@ public:
     qint64 messageID() const;
     QDateTime messageTime() const;
     QString text() const;
-
     QList<ChatMessageElement> elements() const;
+    MessageType messageType() const;
 
 signals:
     void chatMessageChanged();
@@ -67,6 +75,7 @@ private:
     QDateTime m_messageTime;
     QString m_text;
     QList<ChatMessageElement> m_elements;
+    MessageType m_messageType;
 };
 
 #endif // CHATMESSAGE_H

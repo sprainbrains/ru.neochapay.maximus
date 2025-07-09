@@ -27,6 +27,7 @@ ChatMessage::ChatMessage(QObject *parent)
 
 ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     : QObject{parent}
+    , m_messageType(UnknowMessageType)
 {
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();
@@ -42,16 +43,29 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
         chatMessageElement.length = e["length"].toInt();
         m_elements.push_back(chatMessageElement);
     }
+
+    if(!m_text.isEmpty()) {
+        m_messageType = TextMessage;
+    }
+//Attaches
+    QJsonArray attaches = chatMessageObject["attaches"].toArray();
+    foreach (QJsonValue attach, attaches) {
+        if(attach["_type"].toString() == "CONTROL") {
+            m_messageType = ControlMessage;
+        }
+    }
 }
 
 ChatMessage::ChatMessage(const ChatMessage &other, QObject *parent)
     : QObject{parent}
+    , m_messageType(UnknowMessageType)
 {
     m_sender = other.sender();
     m_messageID = other.messageID();
     m_text = other.text();
     m_messageTime = other.messageTime();
     m_elements = other.elements();
+    m_messageType = other.messageType();
 }
 
 ChatMessage &ChatMessage::operator=(const ChatMessage &other)
@@ -61,6 +75,7 @@ ChatMessage &ChatMessage::operator=(const ChatMessage &other)
     m_text = other.text();
     m_messageTime = other.messageTime();
     m_elements = other.elements();
+    m_messageType = other.messageType();
     return *this;
 }
 
@@ -87,4 +102,9 @@ QString ChatMessage::text() const
 QList<ChatMessage::ChatMessageElement> ChatMessage::elements() const
 {
     return m_elements;
+}
+
+ChatMessage::MessageType ChatMessage::messageType() const
+{
+    return m_messageType;
 }
