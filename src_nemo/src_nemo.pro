@@ -21,4 +21,3 @@ qmlfiles.path = /usr/share/ru.neochapay.maximus/qml
 target.path = /usr/bin
 
 INSTALLS += target qmlfiles
-
