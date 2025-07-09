@@ -27,6 +27,7 @@
 #include <models/chatslistmodel.h>
 #include <models/chatmessagesmodel.h>
 #include <api/contactsstorage.h>
+#include <api/chatmessage.h>
 #include <plugin/serverconnection.h>
 #include <plugin/usersession.h>
 
@@ -42,6 +43,7 @@ int main(int argc, char* argv[])
     qmlRegisterType<UserSession>("ru.neochapay.maximus", 1, 0, "UserSession");
     qmlRegisterType<ChatsListModel>("ru.neochapay.maximus", 1, 0, "ChatsListModel");
     qmlRegisterType<ChatMessagesModel>("ru.neochapay.maximus", 1, 0, "ChatMessagesModel");
+    qmlRegisterType<ChatMessage>("ru.neochapay.maximus", 1, 0, "ChatMessage");
 
     QQuickWindow* window = GlacierApp::showWindow();
     window->setTitle(QObject::tr("Maximus"));

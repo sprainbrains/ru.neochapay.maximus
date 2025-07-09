@@ -24,6 +24,7 @@ import Nemo
 import Nemo.Controls
 
 import ru.neochapay.maximus 1.0
+import "../components"
 
 Page {
     id: root
@@ -64,48 +65,14 @@ Page {
             height: parent.height - Theme.itemHeightLarge
             model: chatMessagesModel
 
-            delegate: Item {
-                id: chatMessageItem
-                width: messagesListView.width
-                height: messageAuthor.height + messageTextLabel.height + Theme.itemSpacingSmall*4
-
-                Image{
-                    id: chatMessageIcon
-                    width: Theme.itemHeightLarge
-                    height: Theme.itemHeightLarge
-                    source: messageIcon
-
-                    anchors{
-                        top: parent.top
-                        topMargin: Theme.itemSpacingSmall
-                        left: parent.left
-                        leftMargin: Theme.itemSpacingSmall
-                    }
-                }
-
-                Label{
-                    id: messageAuthor
-                    text: messageName
-                    font.pixelSize: Theme.fontSizeMedium
-                    width: parent.width - Theme.itemSpacingSmall
-                    anchors{
-                        top: parent.top
-                        topMargin: Theme.itemSpacingSmall
-                        left: chatMessageIcon.right
-                        leftMargin: Theme.itemSpacingSmall
-                    }
-                }
-
-                Label{
-                    id: messageTextLabel
-                    text: messageText
-                    font.pixelSize: Theme.fontSizeSmall
-                    width: parent.width - Theme.itemSpacingSmall
-                    anchors{
-                        top: messageAuthor.bottom
-                        topMargin: Theme.itemSpacingSmall
-                        left: chatMessageIcon.right
-                        leftMargin: Theme.itemSpacingSmall
+            delegate: Loader{
+                Component.onCompleted: {
+                    if(messageType == ChatMessage.TextMessage) {
+                        source = "../components/TextMessageItem.qml";
+                    } else if (messageType == ChatMessage.ControlMessage) {
+                        source = "../components/ControlMessageItem.qml";
+                    } else {
+                        source = "../components/UnsupportedMessage.qml"
                     }
                 }
             }
