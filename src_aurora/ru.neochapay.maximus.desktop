@@ -9,5 +9,5 @@ Name[ru]=Максимус
 [X-Application]
 Permissions=PushNotifications;Downloads;Internet
 OrganizationName=ru.neochapay
-ApplicationName=Maximus
+ApplicationName=maximus
 ExecDBus=/usr/bin/ru.neochapay.maximus
