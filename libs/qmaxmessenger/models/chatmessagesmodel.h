@@ -32,6 +32,7 @@ class ChatMessagesModel : public QAbstractListModel
 
 public:
     explicit ChatMessagesModel(QObject *parent = nullptr);
+    virtual ~ChatMessagesModel();
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role) const;
     QHash<int, QByteArray> roleNames() const { return m_hash; }
@@ -45,6 +46,7 @@ private:
     void pushNewMessageToList(QJsonObject message);
 
     MessagesQueue* m_messQueue;
+    QMetaObject::Connection m_connect;
 
     QHash<int, QByteArray> m_hash;
     QList<ChatMessage*> m_messages;

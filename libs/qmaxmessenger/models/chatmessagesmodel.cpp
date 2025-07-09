@@ -25,7 +25,7 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     : QAbstractListModel{parent}
     , m_messQueue(MessagesQueue::instance())
 {
-    connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
+    m_connect = connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
         if(message.opcode() == 49) {
             loadMessagesList(message.payload());
         }
@@ -40,6 +40,11 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     m_hash.insert(Qt::UserRole, QByteArray("messageIcon"));
     m_hash.insert(Qt::UserRole+1, QByteArray("messageName"));
     m_hash.insert(Qt::UserRole+2, QByteArray("messageText"));
+}
+
+ChatMessagesModel::~ChatMessagesModel()
+{
+    QObject::disconnect(m_connect);
 }
 
 int ChatMessagesModel::rowCount(const QModelIndex &parent) const
