@@ -42,7 +42,7 @@ Page {
         }
 
         Button{
-            id: sendPhoneButton
+            id: sendCodeButton
             text: qsTr("Send")
             width: codeNumberField.width
             enabled: codeNumberField.text.length == 6
