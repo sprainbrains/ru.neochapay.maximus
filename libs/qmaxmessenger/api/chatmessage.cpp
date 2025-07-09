@@ -50,7 +50,8 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
 //Attaches
     QJsonArray attaches = chatMessageObject["attaches"].toArray();
     foreach (QJsonValue attach, attaches) {
-        if(attach["_type"].toString() == "CONTROL") {
+        QJsonObject attachObject = attach.toObject();
+        if(attachObject["_type"].toString() == "CONTROL") {
             m_messageType = ControlMessage;
         }
     }
