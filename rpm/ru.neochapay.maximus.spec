@@ -1,3 +1,6 @@
+%define __provides_exclude_from ^%{_datadir}/%{name}/.*$
+%define __requires_exclude ^lib.*\\.*$
+
 Name:       ru.neochapay.maximus
 Summary:    Клиент мессенджера макс
 Version:    0.0.1
@@ -34,7 +37,6 @@ done
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %defattr(644,root,root,-)
-%{_datadir}/%{name}
 %{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
