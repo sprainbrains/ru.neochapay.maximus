@@ -125,7 +125,7 @@ void ChatMessagesModel::pushNewMessageToList(QJsonObject message)
     if(m == nullptr || m->messageID() < 1) {
         return;
     }
-    beginInsertRows( QModelIndex(), 0, 0 );
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_messages.push_back(m);
     endInsertRows();
 }
