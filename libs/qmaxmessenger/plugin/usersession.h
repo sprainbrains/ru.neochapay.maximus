@@ -29,6 +29,7 @@ class UserSession : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int userId READ userId NOTIFY userIdChanged FINAL)
+    Q_PROPERTY(QString authToken READ authToken NOTIFY authTokenChanged)
 
 public:
     explicit UserSession(QObject *parent = nullptr);
@@ -36,8 +37,11 @@ public:
     Q_INVOKABLE void coldStart();
     Q_INVOKABLE void storeToken(QString token);
 
+    QString authToken();
+
 signals:
     void userIdChanged();
+    void authTokenChanged();
 
 private:
     void goNavigation(int from, int to);

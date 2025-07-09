@@ -131,3 +131,9 @@ void UserSession::updateProfile(QJsonObject profile)
         emit userIdChanged();
     }
 }
+
+QString UserSession::authToken()
+{
+    QString authToken = m_settings->value("authToken").toString();;
+    return authToken ;
+}
