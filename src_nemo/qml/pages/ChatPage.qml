@@ -64,19 +64,54 @@ Page {
             height: parent.height - Theme.itemHeightLarge
             model: chatMessagesModel
 
-            delegate: ListViewItemWithActions {
-                id: item
-                label: messageName
-                description: messageText
-                icon: messageIcon
-                width: parent.width
-                height: Theme.itemHeightLarge
-                showNext: false
-                clip: true
+            delegate: Item {
+                id: chatMessageItem
+                width: messagesListView.width
+                height: messageAuthor.height + messageTextLabel.height + Theme.itemSpacingSmall*4
+
+                Image{
+                    id: chatMessageIcon
+                    width: Theme.itemHeightLarge
+                    height: Theme.itemHeightLarge
+                    source: messageIcon
+
+                    anchors{
+                        top: parent.top
+                        topMargin: Theme.itemSpacingSmall
+                        left: parent.left
+                        leftMargin: Theme.itemSpacingSmall
+                    }
+                }
+
+                Label{
+                    id: messageAuthor
+                    text: messageName
+                    font.pixelSize: Theme.fontSizeMedium
+                    width: parent.width - Theme.itemSpacingSmall
+                    anchors{
+                        top: parent.top
+                        topMargin: Theme.itemSpacingSmall
+                        left: chatMessageIcon.right
+                        leftMargin: Theme.itemSpacingSmall
+                    }
+                }
+
+                Label{
+                    id: messageTextLabel
+                    text: messageText
+                    font.pixelSize: Theme.fontSizeSmall
+                    width: parent.width - Theme.itemSpacingSmall
+                    anchors{
+                        top: messageAuthor.bottom
+                        topMargin: Theme.itemSpacingSmall
+                        left: chatMessageIcon.right
+                        leftMargin: Theme.itemSpacingSmall
+                    }
+                }
             }
 
             onCountChanged: {
-                messagesListView.messagesListView = count - 1
+                messagesListView.currentIndex = count - 1
             }
         }
 
