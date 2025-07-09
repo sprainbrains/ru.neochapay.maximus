@@ -24,6 +24,7 @@
 #include "plugin/usersession.h"
 #include "models/chatmessagesmodel.h"
 #include "models/chatslistmodel.h"
+#include "api/chatmessage.h"
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<UserSession>("ru.neochapay.maximus", 1, 0, "UserSession");
     qmlRegisterType<ChatsListModel>("ru.neochapay.maximus", 1, 0, "ChatsListModel");
     qmlRegisterType<ChatMessagesModel>("ru.neochapay.maximus", 1, 0, "ChatMessagesModel");
+    qmlRegisterType<ChatMessage>("ru.neochapay.maximus", 1, 0, "ChatMessage");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
     view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));

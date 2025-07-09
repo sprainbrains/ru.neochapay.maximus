@@ -51,73 +51,28 @@ Page {
         }
 
         onChatLoaded: spinner.enabled = false
-        onRowsInserted: chatMessagesList.scrollToBottom()
     }
 
     SilicaListView {
-        id: chatMessagesList
+        id: messagesListView
         width: parent.width
         height: parent.height - header.height - sendMessageRow.height
         anchors.top:  header.bottom
         model: chatMessagesModel
         clip: true
 
-        Component.onCompleted: scrollToBottom()
+        onCountChanged: {
+            messagesListView.currentIndex = count - 1
+        }
 
-        delegate: ListItem {
-            id: listItem
-            contentHeight:  chatMessageAuthor.height + chatMessageText.height + Theme.paddingSmall * 4
-
-            Image{
-                id: chatMessageImage
-                width: Theme.itemSizeMedium - Theme.paddingSmall * 2
-                height: Theme.itemSizeMedium - Theme.paddingSmall * 2
-                source: messageIcon
-                fillMode: Image.PreserveAspectCrop
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: mask
-                }
-
-                anchors{
-                    left: parent.left
-                    leftMargin: Theme.paddingSmall
-                    top: parent.top
-                    topMargin: Theme.paddingSmall
-                }
-            }
-
-            Rectangle {
-                id: mask
-                width: chatMessageImage.width
-                height: chatMessageImage.width
-                radius: chatMessageImage.width/2
-                visible: chatMessageImage.source == ""
-                anchors.centerIn: chatMessageImage
-                color: "white"
-            }
-
-            Label {
-                 id: chatMessageAuthor
-                 text: messageName
-
-                 anchors{
-                     left: chatMessageImage.right
-                     leftMargin: Theme.paddingSmall
-                     top: parent.top
-                     topMargin: Theme.paddingSmall
-                 }
-             }
-
-            Label {
-                id: chatMessageText
-                text: messageText
-                font.pixelSize: Theme.fontSizeSmall
-                anchors{
-                    left: chatMessageImage.right
-                    leftMargin: Theme.paddingSmall
-                    top: chatMessageAuthor.bottom
-                    topMargin: Theme.paddingSmall
+        delegate: Loader{
+            Component.onCompleted: {
+                if(messageType == ChatMessage.TextMessage) {
+                    source = "../components/TextMessageItem.qml";
+                } else if (messageType == ChatMessage.ControlMessage) {
+                    source = "../components/ControlMessageItem.qml";
+                } else {
+                    source = "../components/UnsupportedMessage.qml"
                 }
             }
         }
