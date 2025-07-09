@@ -21,6 +21,7 @@
 
 #include <QJsonObject>
 #include <QObject>
+#include <QDateTime>
 
 #include "contact.h"
 

@@ -19,6 +19,7 @@
 
 #include "chat.h"
 #include <QJsonArray>
+#include <QDateTime>
 
 Chat::Chat(QObject *parent)
     : QObject{parent}
