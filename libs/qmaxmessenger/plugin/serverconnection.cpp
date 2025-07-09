@@ -161,6 +161,7 @@ void ServerConnection::refreshToken()
 
 void ServerConnection::sendMessage(double chatID, double cid, QString text)
 {
+    Q_UNUSED(cid)
     QJsonObject payload;
     payload["chatId"] = chatID;
     payload["notify"] = true;
