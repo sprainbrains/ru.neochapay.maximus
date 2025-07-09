@@ -21,12 +21,36 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    objectName: "mainPage"
+    objectName: "entherPhonePage"
     allowedOrientations: Orientation.All
 
-    BusyIndicator {
-        size: BusyIndicatorSize.Large
-        anchors.centerIn: parent
-        running: true
+    PageHeader {
+        id: header
+        objectName: "pageHeader"
+        title: qsTr("Enther phone")
+    }
+
+    SilicaFlickable {
+        anchors.fill: parent
+
+        TextField {
+            id: phoneNumberField
+            placeholderText: qsTr("+7XXXXXXXXXX")
+            anchors.centerIn: parent
+        }
+
+        Button{
+            id: sendPhoneButton
+            text: qsTr("Send")
+            width: phoneNumberField.width
+            enabled: phoneNumberField.text.length == 12
+
+            anchors.top: phoneNumberField.bottom
+
+            onClicked: {
+                serverConnection.sendPhone(phoneNumberField.text)
+            }
+        }
     }
 }
+

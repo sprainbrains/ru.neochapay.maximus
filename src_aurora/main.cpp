@@ -21,6 +21,9 @@
 #include <QtQuick>
 
 #include "plugin/serverconnection.h"
+#include "plugin/usersession.h"
+#include "models/chatmessagesmodel.h"
+#include "models/chatslistmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +32,9 @@ int main(int argc, char *argv[])
     application->setApplicationName(QStringLiteral("maximus"));
 
     qmlRegisterType<ServerConnection>("ru.neochapay.maximus", 1, 0, "ServerConnection");
+    qmlRegisterType<UserSession>("ru.neochapay.maximus", 1, 0, "UserSession");
+    qmlRegisterType<ChatsListModel>("ru.neochapay.maximus", 1, 0, "ChatsListModel");
+    qmlRegisterType<ChatMessagesModel>("ru.neochapay.maximus", 1, 0, "ChatMessagesModel");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
     view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));

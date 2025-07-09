@@ -21,12 +21,36 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    objectName: "mainPage"
+    objectName: "entherCodePage"
     allowedOrientations: Orientation.All
 
-    BusyIndicator {
-        size: BusyIndicatorSize.Large
-        anchors.centerIn: parent
-        running: true
+    PageHeader {
+        id: header
+        objectName: "pageHeader"
+        title: qsTr("Enther code")
+    }
+
+    SilicaFlickable {
+        anchors.fill: parent
+
+        TextField {
+            id: codeNumberField
+            placeholderText: qsTr("XXXXXX")
+            anchors.centerIn: parent
+        }
+
+        Button{
+            id: sendCodeButton
+            text: qsTr("Send")
+            width: codeNumberField.width
+            enabled: codeNumberField.text.length == 6
+
+            anchors.top: codeNumberField.bottom
+
+            onClicked: {
+                serverConnection.sendCode(codeNumberField.text)
+            }
+        }
     }
 }
+

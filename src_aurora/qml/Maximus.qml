@@ -23,12 +23,37 @@ import Sailfish.Silica 1.0
 import ru.neochapay.maximus 1.0
 
 ApplicationWindow {
-    objectName: "applicationWindow"
     initialPage: Qt.resolvedUrl("pages/MainPage.qml")
     cover: Qt.resolvedUrl("cover/DefaultCoverPage.qml")
     allowedOrientations: defaultAllowedOrientations
 
     ServerConnection{
         id: serverConnection
+        onReadyToLogin: {
+            if(userSession.authToken.length == 0) {
+                pageStack.replace(Qt.resolvedUrl("pages/EntherPhonePage.qml"))
+                userSession.coldStart()
+            } else {
+                requestDataSync();
+            }
+        }
+        onTokenReady: {
+            userSession.storeToken(token)
+            pageStack.push(Qt.resolvedUrl("pages/EntherCodePage.qml"))
+        }
+    }
+
+    UserSession{
+        id: userSession
+        onUserIdChanged: {
+            if(userSession.userId > 0) {
+                pageStack.clear();
+                pageStack.push(Qt.resolvedUrl("pages/ChatListPage.qml"))
+            }
+        }
+    }
+
+    ChatsListModel{
+        id: chatListModel
     }
 }
