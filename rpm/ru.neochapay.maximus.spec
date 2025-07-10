@@ -3,10 +3,10 @@
 
 Name:       ru.neochapay.maximus
 Summary:    Клиент мессенджера макс
-Version:    0.0.2
+Version:    0.0.3
 Release:    1
 License:    BSD-3-Clause
-URL:        https://auroraos.ru
+URL:        https://neochapay.ru
 Source0:    %{name}-%{version}.tar.bz2
 
 Requires:   sailfishsilica-qt5 >= 0.10.9
