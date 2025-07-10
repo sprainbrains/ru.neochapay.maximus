@@ -51,8 +51,12 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     QJsonArray attaches = chatMessageObject["attaches"].toArray();
     foreach (QJsonValue attach, attaches) {
         QJsonObject attachObject = attach.toObject();
-        if(attachObject["_type"].toString() == "CONTROL") {
+        QString type = attachObject["_type"].toString();
+        if(type == "CONTROL") {
             m_messageType = ControlMessage;
+        } else if(type == "PHOTO") {
+            m_messageType = PhotoMessage;
+            m_extendedData = attachObject["baseUrl"];
         }
     }
 }
@@ -108,4 +112,9 @@ QList<ChatMessage::ChatMessageElement> ChatMessage::elements() const
 ChatMessage::MessageType ChatMessage::messageType() const
 {
     return m_messageType;
+}
+
+const QVariant &ChatMessage::extendedData() const
+{
+    return m_extendedData;
 }

@@ -22,6 +22,7 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QDateTime>
+#include <QVariant>
 
 #include "contact.h"
 
@@ -34,7 +35,7 @@ class ChatMessage : public QObject
     Q_PROPERTY(QString text READ text NOTIFY chatMessageChanged FINAL)
     Q_PROPERTY(QList<ChatMessageElement> elements READ elements NOTIFY chatMessageChanged FINAL)
     Q_PROPERTY(MessageType messageType READ messageType NOTIFY chatMessageChanged FINAL)
-
+    Q_PROPERTY(QVariant extendedData READ extendedData NOTIFY chatMessageChanged)
     // TODO:
     // type
     // attaches
@@ -51,7 +52,9 @@ public:
         UnknowMessageType,
         TextMessage,
         ControlMessage,
+        PhotoMessage
     };
+
     Q_ENUMS(MessageType)
 
     explicit ChatMessage(QObject *parent = nullptr);
@@ -66,6 +69,8 @@ public:
     QList<ChatMessageElement> elements() const;
     MessageType messageType() const;
 
+    const QVariant &extendedData() const;
+
 signals:
     void chatMessageChanged();
 
@@ -76,6 +81,7 @@ private:
     QString m_text;
     QList<ChatMessageElement> m_elements;
     MessageType m_messageType;
+    QVariant m_extendedData;
 };
 
 #endif // CHATMESSAGE_H
