@@ -72,11 +72,7 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 1) {
         return item->sender()->name();
     } else if (role == Qt::UserRole + 2) {
-        if(item->text().isEmpty()) {
-            return "#UNSUPPORTED MESSAGE#";
-        } else {
-            return item->text();
-        }
+        return item->text();
     } else if (role == Qt::UserRole + 3) {
         return item->messageType();
     } else if (role == Qt::UserRole + 4) {

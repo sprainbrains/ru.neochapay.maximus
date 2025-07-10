@@ -56,7 +56,7 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
             m_messageType = ControlMessage;
         } else if(type == "PHOTO") {
             m_messageType = PhotoMessage;
-            m_extendedData = attachObject["baseUrl"];
+            m_extendedData = attachObject["baseUrl"].toString();
         }
     }
 }
