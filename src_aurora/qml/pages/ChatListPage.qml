@@ -40,6 +40,7 @@ Page {
 
         delegate: ListItem {
             id: listItem
+            width: parent.width - Theme.paddingSmall*2
             contentHeight: Theme.itemSizeMedium
             clip: true
 
@@ -88,6 +89,7 @@ Page {
                 id: chatDescriptionLabel
                 text: chatDescription
                 font.pixelSize: Theme.fontSizeSmall
+                width: listItem.width - chatIconImage.width - Theme.paddingSmall*3
                 anchors{
                     left: chatIconImage.right
                     leftMargin: Theme.paddingSmall

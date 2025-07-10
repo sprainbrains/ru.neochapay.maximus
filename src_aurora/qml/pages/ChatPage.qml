@@ -67,7 +67,7 @@ Page {
 
         delegate: Loader{
             Component.onCompleted: {
-                if(messageType == ChatMessage.TextMessage) {
+                if(messageType == ChatMessage.TextMessage || messageType == ChatMessage.PhotoMessage) {
                     source = "../components/TextMessageItem.qml";
                 } else if (messageType == ChatMessage.ControlMessage) {
                     source = "../components/ControlMessageItem.qml";

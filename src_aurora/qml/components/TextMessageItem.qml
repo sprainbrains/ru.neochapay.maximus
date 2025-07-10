@@ -76,8 +76,13 @@ Item {
     Rectangle{
         id: messageBackground
         color: Theme.highlightBackgroundColor
-        width: chatMessageText.width + Theme.paddingLarge * 2
-        height: chatMessageText.height + Theme.paddingLarge * 2
+        width: messageType == ChatMessage.PhotoMessage
+               ? postImage.width + Theme.paddingLarge * 2
+               : chatMessageText.width + Theme.paddingLarge * 2
+
+        height: messageType == ChatMessage.PhotoMessage
+                    ? chatMessageText.height + postImage.height + Theme.paddingLarge * 3
+                    : chatMessageText.height + Theme.paddingLarge * 2
 
         radius: Theme.paddingLarge / 2
 
@@ -90,14 +95,31 @@ Item {
             topMargin: Theme.paddingLarge
         }
 
-        Label {
-            id: chatMessageText
-            text: messageText
-            font.pixelSize: Theme.fontSizeMedium
+        Image {
+            id: postImage
+            source: messageType == ChatMessage.PhotoMessage ? messageExtendedData : ""
+            width: listItem.width * 0.6
+            fillMode: Image.PreserveAspectFit
+            visible: messageType == ChatMessage.PhotoMessage
             anchors{
                 left: parent.left
                 leftMargin: Theme.paddingLarge
                 top: parent.top
+                topMargin: Theme.paddingLarge
+            }
+        }
+
+        Label {
+            id: chatMessageText
+            text: messageText
+            visible: chatMessageText.text.length > 0
+            width: listItem.width * 0.6
+            font.pixelSize: Theme.fontSizeMedium
+            wrapMode: Text.WordWrap
+            anchors{
+                left: parent.left
+                leftMargin: Theme.paddingLarge
+                top: messageType == ChatMessage.PhotoMessage ? postImage.bottom : parent.top
                 topMargin: Theme.paddingLarge
             }
         }
