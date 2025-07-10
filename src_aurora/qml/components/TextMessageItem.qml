@@ -23,9 +23,11 @@ import QtGraphicalEffects 1.0
 
 import ru.neochapay.maximus 1.0
 
-ListItem {
+Item {
     id: listItem
-    contentHeight:  chatMessageAuthor.height + chatMessageText.height + Theme.paddingSmall * 4
+    height: isMyMessage ? messageBackground.height + Theme.paddingLarge * 2 : chatMessageAuthor.height + messageBackground.height + Theme.paddingLarge * 4
+    width: messagesListView.width
+    property bool isMyMessage: messageSenderId == userSession.userId
 
     Image{
         id: chatMessageImage
@@ -37,12 +39,13 @@ ListItem {
         layer.effect: OpacityMask {
             maskSource: mask
         }
+        visible: !isMyMessage
 
         anchors{
             left: parent.left
-            leftMargin: Theme.paddingSmall
+            leftMargin: Theme.paddingLarge
             top: parent.top
-            topMargin: Theme.paddingSmall
+            topMargin: Theme.paddingLarge
         }
     }
 
@@ -59,24 +62,44 @@ ListItem {
     Label {
         id: chatMessageAuthor
         text: messageName
+        visible: !isMyMessage
+        font.pixelSize: Theme.fontSizeSmall
 
         anchors{
             left: chatMessageImage.right
-            leftMargin: Theme.paddingSmall
+            leftMargin: Theme.paddingLarge
             top: parent.top
-            topMargin: Theme.paddingSmall
+            topMargin: Theme.paddingLarge
         }
     }
 
-    Label {
-        id: chatMessageText
-        text: messageText
-        font.pixelSize: Theme.fontSizeSmall
+    Rectangle{
+        id: messageBackground
+        color: Theme.highlightBackgroundColor
+        width: chatMessageText.width + Theme.paddingLarge * 2
+        height: chatMessageText.height + Theme.paddingLarge * 2
+
+        radius: Theme.paddingLarge / 2
+
         anchors{
-            left: chatMessageImage.right
-            leftMargin: Theme.paddingSmall
+            left: isMyMessage ? undefined : chatMessageImage.right
+            leftMargin: Theme.paddingLarge
+            right: isMyMessage ? parent.right : undefined
+            rightMargin: isMyMessage ? Theme.paddingLarge : undefined
             top: chatMessageAuthor.bottom
-            topMargin: Theme.paddingSmall
+            topMargin: Theme.paddingLarge
+        }
+
+        Label {
+            id: chatMessageText
+            text: messageText
+            font.pixelSize: Theme.fontSizeMedium
+            anchors{
+                left: parent.left
+                leftMargin: Theme.paddingLarge
+                top: parent.top
+                topMargin: Theme.paddingLarge
+            }
         }
     }
 }
