@@ -32,7 +32,7 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();
     m_text = chatMessageObject["text"].toString();
-    m_messageTime = QDateTime::fromMSecsSinceEpoch(chatMessageObject["time"].toInt()*1000);
+    m_messageTime = QDateTime::fromMSecsSinceEpoch(chatMessageObject["time"].toDouble());
 
     QJsonArray elements = chatMessageObject["elements"].toArray();
     foreach (QJsonValue element, elements) {
