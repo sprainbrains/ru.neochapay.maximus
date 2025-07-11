@@ -29,20 +29,22 @@ class Chat : public QObject
     Q_OBJECT
     Q_PROPERTY(Contact owner READ owner NOTIFY chatChanged FINAL)
     Q_PROPERTY(bool hasBots READ hasBots NOTIFY chatChanged FINAL)
-    Q_PROPERTY(int joinTime READ joinTime NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 joinTime READ joinTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(int created READ created NOTIFY chatChanged FINAL)
     Q_PROPERTY(QList<ChatMessage*> messages READ messages NOTIFY chatChanged FINAL)
+    Q_PROPERTY(ChatMessage* pinnedMessage READ pinnedMessage NOTIFY chatChanged)
     Q_PROPERTY(Type type READ type NOTIFY chatChanged FINAL)
-    Q_PROPERTY(int lastFireDelayedErrorTime READ lastFireDelayedErrorTime NOTIFY chatChanged FINAL)
-    Q_PROPERTY(int lastDelayedUpdateTime READ lastDelayedUpdateTime NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 lastFireDelayedErrorTime READ lastFireDelayedErrorTime NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 lastDelayedUpdateTime READ lastDelayedUpdateTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(int prevMessageId READ prevMessageId NOTIFY chatChanged FINAL)
 //TODO options
     Q_PROPERTY(QDateTime modified READ modified NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastEventTime READ lastEventTime NOTIFY chatChanged FINAL)
-//Skip ID (ID = CID)
+
     Q_PROPERTY(Status status READ status NOTIFY chatChanged FINAL)
     Q_PROPERTY(QList<Contact> participants READ participants NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 chatId READ chatId NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 chatCid READ chatCid NOTIFY chatChanged FINAL)
 
 //ONLY FOR Type == CHAT
     Q_PROPERTY(QString chatTitle READ chatTitle NOTIFY chatChanged FINAL)
@@ -83,13 +85,16 @@ public:
     Contact owner() const;
     bool hasBots() const;
     int created() const;
-    int lastFireDelayedErrorTime() const;
-    int lastDelayedUpdateTime() const;
-    int prevMessageId() const;
+    qint64 lastFireDelayedErrorTime() const;
+    qint64 lastDelayedUpdateTime() const;
+    qint64 prevMessageId() const;
     QList<Contact> participants() const;
-    int joinTime() const;
+    qint64 joinTime() const;
     QString chatTitle() const;
     QString baseRawIconUrl() const;
+    ChatMessage *pinnedMessage() const;
+
+    qint64 chatCid() const;
 
 signals:
     void chatChanged();
@@ -104,13 +109,15 @@ private:
     Contact m_owner;
     bool m_hasBots;
     int m_created;
-    int m_lastFireDelayedErrorTime;
-    int m_lastDelayedUpdateTime;
-    int m_prevMessageId;
+    qint64 m_lastFireDelayedErrorTime;
+    qint64 m_lastDelayedUpdateTime;
+    qint64 m_prevMessageId;
     QList<Contact> m_participants;
-    int m_joinTime;
+    qint64 m_joinTime;
     QString m_chatTitle;
     QString m_baseRawIconUrl;
+    ChatMessage *m_pinnedMessage;
+    qint64 m_chatCid;
 };
 
 #endif // CHAT_H

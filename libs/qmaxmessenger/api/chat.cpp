@@ -31,7 +31,7 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
 {
     m_owner = Contact(jsonObject["owner"].toInt());
     m_hasBots = jsonObject["hasBots"].toInt();
-    m_joinTime = jsonObject["joinTime"].toInt();
+    m_joinTime = jsonObject["joinTime"].toDouble();
     m_created = jsonObject["created"].toInt();
     m_messages.push_back(new ChatMessage(jsonObject["lastMessage"].toObject()));
     if(jsonObject["type"].toString() == "DIALOG") {
@@ -43,10 +43,10 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
     } else {
         m_type = Type::UNKNOWTYPE;
     }
-    m_lastFireDelayedErrorTime = jsonObject["lastFireDelayedErrorTime"].toInt();
-    m_lastDelayedUpdateTime = jsonObject["lastDelayedUpdateTime"].toInt();
-    m_prevMessageId = jsonObject["prevMessageId"].toInt();
-    m_modified = QDateTime::fromMSecsSinceEpoch(jsonObject["modified"].toInt() * 1000);
+    m_lastFireDelayedErrorTime = jsonObject["lastFireDelayedErrorTime"].toDouble();
+    m_lastDelayedUpdateTime = jsonObject["lastDelayedUpdateTime"].toDouble();
+    m_prevMessageId = jsonObject["prevMessageId"].toDouble();
+    m_modified = QDateTime::fromMSecsSinceEpoch(jsonObject["modified"].toDouble() * 1000);
     m_lastEventTime = jsonObject["lastEventTime"].toDouble();
 
     if(jsonObject["status"].toString() == "ACTIVE") {
@@ -65,6 +65,8 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
         }
     }
     m_chatId = jsonObject["id"].toDouble();
+    m_chatCid = jsonObject["cid"].toDouble();
+    m_pinnedMessage = new ChatMessage(jsonObject["pinnedMessage"].toObject());
 }
 
 
@@ -85,6 +87,8 @@ Chat::Chat(const Chat &other, QObject *parent)
     m_status = other.status();
     m_participants = other.participants();
     m_chatId = other.chatId();
+    m_chatCid = other.chatCid();
+    m_pinnedMessage = other.pinnedMessage();
 }
 
 Chat &Chat::operator=(const Chat &other)
@@ -103,6 +107,8 @@ Chat &Chat::operator=(const Chat &other)
     m_status = other.status();
     m_participants = other.participants();
     m_chatId = other.chatId();
+    m_chatCid = other.chatCid();
+    m_pinnedMessage = other.pinnedMessage();
 
     return *this;
 }
@@ -152,17 +158,17 @@ int Chat::created() const
     return m_created;
 }
 
-int Chat::lastFireDelayedErrorTime() const
+qint64 Chat::lastFireDelayedErrorTime() const
 {
     return m_lastFireDelayedErrorTime;
 }
 
-int Chat::lastDelayedUpdateTime() const
+qint64 Chat::lastDelayedUpdateTime() const
 {
     return m_lastDelayedUpdateTime;
 }
 
-int Chat::prevMessageId() const
+qint64 Chat::prevMessageId() const
 {
     return m_prevMessageId;
 }
@@ -172,7 +178,7 @@ QList<Contact> Chat::participants() const
     return m_participants;
 }
 
-int Chat::joinTime() const
+qint64 Chat::joinTime() const
 {
     return m_joinTime;
 }
@@ -185,4 +191,14 @@ QString Chat::chatTitle() const
 QString Chat::baseRawIconUrl() const
 {
     return m_baseRawIconUrl;
+}
+
+ChatMessage *Chat::pinnedMessage() const
+{
+    return m_pinnedMessage;
+}
+
+qint64 Chat::chatCid() const
+{
+    return m_chatCid;
 }
