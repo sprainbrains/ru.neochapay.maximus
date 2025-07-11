@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include "api/chat.h"
 #include "api/messagesqueue.h"
 #include "api/settings.h"
 
@@ -39,7 +40,7 @@ public:
     Q_INVOKABLE void requestContactsByIDs(QList<int> idS);
     Q_INVOKABLE void requestChatById(int chatId, int from, int backward = 30, int forward = 0);
     Q_INVOKABLE void refreshToken();
-    Q_INVOKABLE void sendMessage(double chatID, double cid, QString text);
+    Q_INVOKABLE void sendMessage(Chat *chat, QString text);
 
 signals:
     void readyToLogin();

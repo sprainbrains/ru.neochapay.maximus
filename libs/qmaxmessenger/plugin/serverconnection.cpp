@@ -159,14 +159,16 @@ void ServerConnection::refreshToken()
     });
 }
 
-void ServerConnection::sendMessage(double chatID, double cid, QString text)
+void ServerConnection::sendMessage(Chat *chat, QString text)
 {
-    Q_UNUSED(cid)
     QJsonObject payload;
-    payload["chatId"] = chatID;
+    payload["chatId"] = chat->chatId();
     payload["notify"] = true;
     QJsonObject message;
     message["text"] = text;
+    message["cid"] = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    message["attaches"] = QJsonArray();
+    message["elements"] = QJsonArray();
     payload["message"] = message;
 
     m_messQueue->sendMessage(64, payload);
