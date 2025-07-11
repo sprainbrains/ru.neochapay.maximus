@@ -24,14 +24,19 @@
 ChatMessagesModel::ChatMessagesModel(QObject *parent)
     : QAbstractListModel{parent}
     , m_messQueue(MessagesQueue::instance())
+    , m_canFetchMore(true)
 {
     m_connect = connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
         if(message.opcode() == 49) {
             loadMessagesList(message.payload());
         }
 
-        if(message.opcode() == 128) {
-            if(message.payload()["chatId"].toDouble() == m_currentChatId) {
+        if(message.opcode() == 128 || message.opcode() == 64) {
+            if(m_chat == nullptr) {
+                return;
+            }
+
+            if(message.payload()["chatId"].toDouble() == m_chat->chatId()) {
                 pushNewMessageToList(message.payload()["message"].toObject());
             }
         }
@@ -84,18 +89,45 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void ChatMessagesModel::requsetChat(double chatId, qint64 lastEventTime)
+bool ChatMessagesModel::canFetchMore(const QModelIndex &index) const
 {
+    Q_UNUSED(index);
+    return m_canFetchMore;
+}
+
+void ChatMessagesModel::fetchMore(const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    qint64 lastEventTime = 0;
+    if(m_chat == nullptr) {
+        return;
+    }
+
+    if(m_messages.count() > 0) {
+        ChatMessage* firstInModel = m_messages.first();
+        qDebug() << firstInModel->messageTime();
+
+        lastEventTime = firstInModel->messageTime().toMSecsSinceEpoch();
+    } else {
+        lastEventTime = m_chat->lastEventTime();
+    }
+    requsetChat(lastEventTime);
+}
+
+void ChatMessagesModel::requsetChat(qint64 lastEventTime)
+{
+    if(m_chat == nullptr) {
+        return;
+    }
+
     QJsonObject payload;
     payload["backward"] = 30;
     payload["forward"] = 0;
     payload["getMessages"] = true;
-    payload["chatId"] = chatId;
+    payload["chatId"] = m_chat->chatId();
     payload["from"] = lastEventTime;
 
     m_messQueue->sendMessage(49, payload);
-
-    m_currentChatId = chatId;
 }
 
 void ChatMessagesModel::loadMessagesList(QJsonObject payload)
@@ -105,8 +137,13 @@ void ChatMessagesModel::loadMessagesList(QJsonObject payload)
         return;
     }
 
-    beginResetModel();
-    m_messages.clear();
+    if(messages.count() < 30) {
+        m_canFetchMore = false;
+    }
+
+    beginInsertRows(QModelIndex(), 0, messages.count() - 1);
+    QList<ChatMessage*> newMessages;
+
     foreach(QJsonValue mess, messages) {
         ChatMessage* m = new ChatMessage(mess.toObject());
         if(m == nullptr) {
@@ -114,10 +151,16 @@ void ChatMessagesModel::loadMessagesList(QJsonObject payload)
         }
 
         if(m->messageID() > 0) {
-            m_messages.push_back(m);
+            newMessages.push_back(m);
         }
     }
-    endResetModel();
+
+    foreach(ChatMessage* m, m_messages) {
+        newMessages.push_back(m);
+    }
+    m_messages = newMessages;
+
+    endInsertRows();
     emit chatLoaded();
 }
 
@@ -132,3 +175,16 @@ void ChatMessagesModel::pushNewMessageToList(QJsonObject message)
     endInsertRows();
 }
 
+
+Chat *ChatMessagesModel::chat() const
+{
+    return m_chat;
+}
+
+void ChatMessagesModel::setChat(Chat *newChat)
+{
+    if (m_chat == newChat)
+        return;
+    m_chat = newChat;
+    emit chatChanged();
+}

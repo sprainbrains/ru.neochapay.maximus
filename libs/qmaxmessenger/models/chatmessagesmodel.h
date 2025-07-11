@@ -25,21 +25,31 @@
 
 #include <api/messagesqueue.h>
 #include <api/chatmessage.h>
+#include <api/chat.h>
 
 class ChatMessagesModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(Chat* chat READ chat WRITE setChat NOTIFY chatChanged)
 
 public:
     explicit ChatMessagesModel(QObject *parent = nullptr);
     virtual ~ChatMessagesModel();
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    QVariant data(const QModelIndex& index, int role) const;
-    QHash<int, QByteArray> roleNames() const { return m_hash; }
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override { return m_hash; }
+    Q_INVOKABLE void requsetChat(qint64 lastEventTime);
 
-    Q_INVOKABLE void requsetChat(double chatId, qint64 lastEventTime);
+    Chat *chat() const;
+    void setChat(Chat *newChat);
+
+protected:
+    bool canFetchMore(const QModelIndex& index = QModelIndex()) const override;
+    void fetchMore(const QModelIndex& index = QModelIndex()) override;
+
 signals:
     void chatLoaded();
+    void chatChanged();
 
 private:
     void loadMessagesList(QJsonObject payload);
@@ -50,7 +60,8 @@ private:
 
     QHash<int, QByteArray> m_hash;
     QList<ChatMessage*> m_messages;
-    double m_currentChatId;
+    Chat *m_chat;
+    bool m_canFetchMore;
 };
 
 #endif // CHATMESSAGESMODEL_H
