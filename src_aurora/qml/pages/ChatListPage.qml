@@ -100,8 +100,7 @@ Page {
 
             onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"),
                                       {
-                                          chatId: chatId,
-                                          lastEventTime: lastEventTime
+                                          currentChat: chatListModel.get(index)
                                       })
         }
     }

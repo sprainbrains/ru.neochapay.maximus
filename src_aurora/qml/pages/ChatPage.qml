@@ -34,7 +34,7 @@ Page {
         title: qsTr("Chat")
     }
 
-    property var chatId
+    property var currentChat
     property var lastEventTime
 
     BusyIndicator {
@@ -46,11 +46,11 @@ Page {
 
     ChatMessagesModel{
         id: chatMessagesModel
-        Component.onCompleted: {
-            chatMessagesModel.requsetChat(chatId, lastEventTime)
+        chat: currentChat
+        onChatLoaded: {
+            spinner.enabled = false
+            messagesListView.needToUpdate = true
         }
-
-        onChatLoaded: spinner.enabled = false
     }
 
     SilicaListView {
@@ -60,6 +60,8 @@ Page {
         anchors.top:  header.bottom
         model: chatMessagesModel
         clip: true
+
+        property bool needToUpdate: true
 
         onCountChanged: {
             messagesListView.currentIndex = count - 1
@@ -101,18 +103,18 @@ Page {
             width: parent.height - Theme.paddingSmall * 2
             height: parent.height - Theme.paddingSmall * 2
             icon.source: "image://theme/icon-m-send?" + (pressed
-                         ? Theme.highlightColor
-                         : Theme.primaryColor)
+                                                         ? Theme.highlightColor
+                                                         : Theme.primaryColor)
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
                 left: messageTextField.right
                 leftMargin: Theme.paddingSmall
             }
-             onClicked: {
-                 serverConnection.sendMessage(chatId, 0, messageTextField.text)
-                 messageTextField.text = ""
-             }
+            onClicked: {
+                serverConnection.sendMessage(currentChat, messageTextField.text)
+                messageTextField.text = ""
+            }
         }
     }
 
