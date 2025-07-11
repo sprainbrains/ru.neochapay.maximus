@@ -93,6 +93,14 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+Chat *ChatsListModel::get(int index)
+{
+    if (index >= m_chats.size() || index < 0) {
+        return nullptr;
+    }
+    return m_chats.at(index);
+}
+
 void ChatsListModel::loadChatsList(QJsonObject payload)
 {
     QJsonArray chats = payload["chats"].toArray();

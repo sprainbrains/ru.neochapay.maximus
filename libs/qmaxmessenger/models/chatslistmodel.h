@@ -33,8 +33,7 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role) const;
     QHash<int, QByteArray> roleNames() const { return m_hash; }
-
-signals:
+    Q_INVOKABLE Chat* get(int index);
 
 private:
     void loadChatsList(QJsonObject payload);
