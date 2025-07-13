@@ -22,87 +22,100 @@ import Sailfish.Silica 1.0
 import QtGraphicalEffects 1.0
 
 Page {
-    objectName: "chatsListPage"
+    id: chatListPage
     allowedOrientations: Orientation.All
 
-    PageHeader {
-        id: header
-        objectName: "pageHeader"
-        title: qsTr("Chats")
-    }
+    SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: column.height
 
-    SilicaListView {
-        width: parent.width
-        height: parent.height - header.height
-        anchors.top:  header.bottom
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Logout")
+                onClicked: userSession.logout()
+            }
+        }
 
-        model: chatListModel
+        Column {
+            id: column
+            width: parent.width
 
-        delegate: ListItem {
-            id: listItem
-            width: parent.width - Theme.paddingSmall*2
-            contentHeight: Theme.itemSizeMedium
-            clip: true
-
-            Image{
-                id: chatIconImage
-                width: parent.height - Theme.paddingSmall * 2
-                height: parent.height - Theme.paddingSmall * 2
-                source: chatIcon
-                fillMode: Image.PreserveAspectCrop
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: mask
-                }
-
-                anchors{
-                    left: parent.left
-                    leftMargin: Theme.paddingSmall
-                    top: parent.top
-                    topMargin: Theme.paddingSmall
-                }
+            PageHeader {
+                id: header
+                objectName: "pageHeader"
+                title: qsTr("Chats")
             }
 
-            Rectangle {
-                id: mask
-                width: chatIconImage.width
-                height: chatIconImage.width
-                radius: chatIconImage.width/2
-                visible: chatIconImage.source == ""
-                anchors.centerIn: chatIconImage
-                color: "white"
-            }
+            SilicaListView {
+                width: parent.width
+                height: contentHeight
+                model: chatListModel
+                delegate: ListItem {
+                    id: listItem
+                    width: parent.width - Theme.paddingSmall*2
+                    contentHeight: Theme.itemSizeMedium
+                    clip: true
 
-            Label {
-                 id: chatName
-                 text: title
+                    Image{
+                        id: chatIconImage
+                        width: parent.height - Theme.paddingSmall * 2
+                        height: parent.height - Theme.paddingSmall * 2
+                        source: chatIcon
+                        fillMode: Image.PreserveAspectCrop
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: mask
+                        }
 
-                 anchors{
-                     left: chatIconImage.right
-                     leftMargin: Theme.paddingSmall
-                     top: parent.top
-                     topMargin: Theme.paddingSmall
-                 }
-             }
+                        anchors{
+                            left: parent.left
+                            leftMargin: Theme.paddingSmall
+                            top: parent.top
+                            topMargin: Theme.paddingSmall
+                        }
+                    }
 
-            Label {
-                id: chatDescriptionLabel
-                text: chatDescription
-                font.pixelSize: Theme.fontSizeSmall
-                width: listItem.width - chatIconImage.width - Theme.paddingSmall*3
-                anchors{
-                    left: chatIconImage.right
-                    leftMargin: Theme.paddingSmall
-                    top: chatName.bottom
-                    topMargin: Theme.paddingSmall
+                    Rectangle {
+                        id: mask
+                        width: chatIconImage.width
+                        height: chatIconImage.width
+                        radius: chatIconImage.width/2
+                        visible: chatIconImage.source == ""
+                        anchors.centerIn: chatIconImage
+                        color: "white"
+                    }
+
+                    Label {
+                        id: chatName
+                        text: title
+
+                        anchors{
+                            left: chatIconImage.right
+                            leftMargin: Theme.paddingSmall
+                            top: parent.top
+                            topMargin: Theme.paddingSmall
+                        }
+                    }
+
+                    Label {
+                        id: chatDescriptionLabel
+                        text: chatDescription
+                        font.pixelSize: Theme.fontSizeSmall
+                        width: listItem.width - chatIconImage.width - Theme.paddingSmall*3
+                        anchors{
+                            left: chatIconImage.right
+                            leftMargin: Theme.paddingSmall
+                            top: chatName.bottom
+                            topMargin: Theme.paddingSmall
+                        }
+                    }
+
+                    onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"),
+                                              {
+                                                  currentChat: chatListModel.get(index)
+                                              })
                 }
             }
-
-            onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"),
-                                      {
-                                          currentChat: chatListModel.get(index)
-                                      })
         }
     }
 }
-
