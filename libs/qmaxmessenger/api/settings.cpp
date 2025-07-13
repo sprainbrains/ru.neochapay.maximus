@@ -20,6 +20,7 @@
 #include "settings.h"
 
 #include <QMutex>
+#include <QFile>
 
 static Settings* settingsInstance = 0;
 
@@ -52,6 +53,11 @@ QVariant Settings::value(const QString &key, const QVariant defaultValue)
 bool Settings::boolValue(const QString& key, bool defaultValue)
 {
     return QSettings::value(key, defaultValue).toBool();
+}
+
+void Settings::reset()
+{
+    QFile::remove(this->fileName());
 }
 
 void Settings::setValue(const QString& key, const QVariant& value)

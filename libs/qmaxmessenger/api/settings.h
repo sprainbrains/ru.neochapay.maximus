@@ -36,6 +36,8 @@ public:
     Q_INVOKABLE QVariant value(const QString& key, const QVariant defaultValue = QVariant());
     Q_INVOKABLE bool boolValue(const QString& key, const bool defaultValue);
 
+    void reset();
+
 signals:
     void settingChanged(const QString& key);
 
