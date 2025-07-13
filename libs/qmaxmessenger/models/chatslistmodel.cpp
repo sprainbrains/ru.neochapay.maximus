@@ -56,6 +56,9 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     }
 
     Chat* item = m_chats.at(index.row());
+    if(item == nullptr) {
+        return QVariant();
+    }
     Contact participant;
     if(item->type() == Chat::DIALOG && item->participants().count() > 0) {
         participant = item->participants().first();
