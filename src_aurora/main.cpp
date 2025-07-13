@@ -26,6 +26,7 @@
 #include "models/chatslistmodel.h"
 #include "api/chatmessage.h"
 #include "api/chat.h"
+#include "emojimodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<ChatMessagesModel>("ru.neochapay.maximus", 1, 0, "ChatMessagesModel");
     qmlRegisterType<ChatMessage>("ru.neochapay.maximus", 1, 0, "ChatMessage");
     qmlRegisterType<Chat>("ru.neochapay.maximus", 1, 0, "Chat");
+    qmlRegisterType<EmojiModel>("EmojiModel", 1, 0, "EmojiModel");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
     view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));

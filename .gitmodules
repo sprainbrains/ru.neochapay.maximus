@@ -1,0 +1,9 @@
+[submodule "third_parties/qml-emoji-picker"]
+	path = third_parties/qml-emoji-picker
+	url = https://github.com/huangcheng/qml-emoji-picker.git
+[submodule "src_aurora/third_parties/qml-emoji-picker"]
+	path = src_aurora/third_parties/qml-emoji-picker
+	url = https://github.com/huangcheng/qml-emoji-picker.git
+[submodule "src_aurora/third_parties/qml-emoji-picker2"]
+	path = src_aurora/third_parties/qml-emoji-picker2
+	url = https://github.com/AmirHosseinCH/EmojiPicker.git
