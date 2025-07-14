@@ -112,6 +112,7 @@ Page {
 
                     onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"),
                                               {
+                                                  chatTitle: title,
                                                   currentChat: chatListModel.get(index)
                                               })
                 }

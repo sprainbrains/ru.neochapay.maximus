@@ -25,6 +25,7 @@
 #include "models/chatmessagesmodel.h"
 #include "models/chatslistmodel.h"
 #include "api/chatmessage.h"
+#include "api/chatmessagereactions.h"
 #include "api/chat.h"
 
 int main(int argc, char *argv[])
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<ChatsListModel>("ru.neochapay.maximus", 1, 0, "ChatsListModel");
     qmlRegisterType<ChatMessagesModel>("ru.neochapay.maximus", 1, 0, "ChatMessagesModel");
     qmlRegisterType<ChatMessage>("ru.neochapay.maximus", 1, 0, "ChatMessage");
+    qmlRegisterType<ChatMessageReactions>("ru.neochapay.maximus", 1, 0, "ChatMessageReactions");
     qmlRegisterType<Chat>("ru.neochapay.maximus", 1, 0, "Chat");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());

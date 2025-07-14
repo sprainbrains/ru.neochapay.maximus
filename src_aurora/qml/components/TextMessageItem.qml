@@ -28,6 +28,7 @@ Item {
     height: isMyMessage ? messageBackground.height + Theme.paddingLarge * 2 : chatMessageAuthor.height + messageBackground.height + Theme.paddingLarge * 4
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
+    property var message
 
     Image{
         id: chatMessageImage
@@ -81,8 +82,8 @@ Item {
                : chatMessageText.width + Theme.paddingLarge * 2
 
         height: messageType == ChatMessage.PhotoMessage
-                    ? chatMessageText.height + postImage.height + Theme.paddingLarge * 3
-                    : chatMessageText.height + Theme.paddingLarge * 2
+                    ? chatMessageText.height + reactionsCounter.height + postImage.height + Theme.paddingLarge * 3
+                    : chatMessageText.height + reactionsCounter.height + Theme.paddingLarge * 3
 
         radius: Theme.paddingLarge / 2
 
@@ -121,6 +122,18 @@ Item {
                 leftMargin: Theme.paddingLarge
                 top: messageType == ChatMessage.PhotoMessage ? postImage.bottom : parent.top
                 topMargin: Theme.paddingLarge
+            }
+        }
+
+        Item{
+            id: reactionsCounter
+            visible: reactionsCount > 0
+
+            anchors{
+                top: chatMessageText.bottom
+                topMargin: Theme.paddingLarge
+                right: parent.right
+                rightMargin: Theme.paddingLarge
             }
         }
     }

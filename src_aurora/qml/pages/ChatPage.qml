@@ -27,6 +27,7 @@ Page {
     id: chatListPage
     objectName: "chatsListPage"
     allowedOrientations: Orientation.All
+    property alias chatTitle: header.title
 
     PageHeader {
         id: header
@@ -35,7 +36,6 @@ Page {
     }
 
     property var currentChat
-    property var lastEventTime
 
     BusyIndicator {
         id: spinner
@@ -83,8 +83,9 @@ Page {
     Item{
         id: sendMessageRow
         width: parent.width
-        height: Theme.iconSizeExtraLarge
+        height: visible ? Theme.iconSizeExtraLarge : 0
         anchors.bottom: chatListPage.bottom
+        visible: currentChat.type !== Chat.CHANNEL;
 
         TextField{
             id: messageTextField
