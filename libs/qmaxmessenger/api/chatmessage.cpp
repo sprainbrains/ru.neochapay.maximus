@@ -59,6 +59,16 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
             m_extendedData = attachObject["baseUrl"].toString();
         }
     }
+
+//Reactions
+    m_reactionsCount = chatMessageObject["reactionInfo"].toObject()["totalCount"].toInt();
+    QJsonArray reactions = chatMessageObject["reactionInfo"].toObject()["counters"].toArray();
+    foreach(QJsonValue reaction, reactions) {
+        int reactionsCount = reaction.toObject()["count"].toInt();
+        QString reactionsString = reaction.toObject()["reaction"].toString();
+        ChatMessageReactions* r = new ChatMessageReactions(reactionsCount, reactionsString);
+        m_reactions.push_back(r);
+    }
 }
 
 ChatMessage::ChatMessage(const ChatMessage &other, QObject *parent)
@@ -117,4 +127,14 @@ ChatMessage::MessageType ChatMessage::messageType() const
 const QVariant &ChatMessage::extendedData() const
 {
     return m_extendedData;
+}
+
+const QList<ChatMessageReactions *> &ChatMessage::reactions() const
+{
+    return m_reactions;
+}
+
+int ChatMessage::reactionsCount() const
+{
+    return m_reactionsCount;
 }

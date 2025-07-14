@@ -8,6 +8,7 @@ LIBS += -L../qtwebsockets$$QT_MAJOR_VERSION -lqtwebsockets
 SOURCES += \
     api/chat.cpp \
     api/chatmessage.cpp \
+    api/chatmessagereactions.cpp \
     api/connection.cpp \
     api/contact.cpp \
     api/contactsstorage.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 HEADERS += \
     api/chat.h \
     api/chatmessage.h \
+    api/chatmessagereactions.h \
     api/connection.h \
     api/contact.h \
     api/contactsstorage.h \

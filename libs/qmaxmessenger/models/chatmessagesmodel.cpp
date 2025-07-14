@@ -34,6 +34,8 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     m_hash.insert(Qt::UserRole+3, QByteArray("messageType"));
     m_hash.insert(Qt::UserRole+4, QByteArray("messageSenderId"));
     m_hash.insert(Qt::UserRole+5, QByteArray("messageExtendedData"));
+    m_hash.insert(Qt::UserRole+6, QByteArray("reactionsCount"));
+    m_hash.insert(Qt::UserRole+7, QByteArray("reactions"));
 }
 
 ChatMessagesModel::~ChatMessagesModel()
@@ -89,6 +91,10 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
         return item->sender()->userId();
     } else if (role == Qt::UserRole + 5) {
         return item->extendedData();
+    } else if (role == Qt::UserRole + 6) {
+        return item->reactionsCount();
+    } else if (role == Qt::UserRole + 7) {
+        return QVariant::fromValue(item->reactions());
     }
 
     return QVariant();

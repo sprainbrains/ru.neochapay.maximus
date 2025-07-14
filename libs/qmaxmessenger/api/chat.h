@@ -33,10 +33,11 @@ class Chat : public QObject
     Q_PROPERTY(int created READ created NOTIFY chatChanged FINAL)
     Q_PROPERTY(QList<ChatMessage*> messages READ messages NOTIFY chatChanged FINAL)
     Q_PROPERTY(ChatMessage* pinnedMessage READ pinnedMessage NOTIFY chatChanged)
-    Q_PROPERTY(Type type READ type NOTIFY chatChanged FINAL)
+    Q_PROPERTY(ChatType type READ type NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastFireDelayedErrorTime READ lastFireDelayedErrorTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastDelayedUpdateTime READ lastDelayedUpdateTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(int prevMessageId READ prevMessageId NOTIFY chatChanged FINAL)
+    Q_PROPERTY(Access access READ access NOTIFY chatChanged FINAL)
 //TODO options
     Q_PROPERTY(QDateTime modified READ modified NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastEventTime READ lastEventTime NOTIFY chatChanged FINAL)
@@ -50,13 +51,18 @@ class Chat : public QObject
     Q_PROPERTY(QString chatTitle READ chatTitle NOTIFY chatChanged FINAL)
     Q_PROPERTY(QString baseRawIconUrl READ baseRawIconUrl NOTIFY chatChanged FINAL)
 
+//ONLY FOR Type == CHANNEL || Type == CHAT
+    Q_PROPERTY(int participantsCount READ participantsCount NOTIFY chatChanged)
+
 
 public:
-    enum Type{
+    enum ChatType{
         UNKNOWTYPE,
         CHAT,
-        DIALOG
+        DIALOG,
+        CHANNEL
     };
+    Q_ENUMS(ChatType)
 
     enum Status{
         UNKNOWSTATUS,
@@ -79,7 +85,7 @@ public:
     Status status() const;
     qint64 lastEventTime() const;
     QDateTime modified() const;
-    Type type() const;
+    ChatType type() const;
     QList<ChatMessage*> messages() const;
 
     Contact owner() const;
@@ -93,8 +99,9 @@ public:
     QString chatTitle() const;
     QString baseRawIconUrl() const;
     ChatMessage *pinnedMessage() const;
-
     qint64 chatCid() const;
+    Access access() const;
+    int participantsCount() const;
 
 signals:
     void chatChanged();
@@ -104,7 +111,7 @@ private:
     Status m_status;
     qint64 m_lastEventTime;
     QDateTime m_modified;
-    Type m_type;
+    ChatType m_type;
     QList<ChatMessage*> m_messages;
     Contact m_owner;
     bool m_hasBots;
@@ -118,6 +125,8 @@ private:
     QString m_baseRawIconUrl;
     ChatMessage *m_pinnedMessage;
     qint64 m_chatCid;
+    Access m_access;
+    int m_participantsCount;
 };
 
 #endif // CHAT_H
