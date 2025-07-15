@@ -3,7 +3,7 @@
 
 Name:       ru.neochapay.maximus
 Summary:    Клиент мессенджера макс
-Version:    0.0.5
+Version:    0.0.6
 Release:    1
 License:    BSD-3-Clause
 URL:        https://neochapay.ru
@@ -16,7 +16,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 
 %description
-Короткое описание моего приложения для ОС Аврора
+OpenSource клиент мессенджера максдля ОС Аврора
 
 %prep
 %autosetup

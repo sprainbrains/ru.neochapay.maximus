@@ -59,10 +59,6 @@
 <context>
     <name>ChatListPage</name>
     <message>
-        <source>About</source>
-        <translation>О программе</translation>
-    </message>
-    <message>
         <source>Logout</source>
         <translation>Выйти</translation>
     </message>
@@ -71,16 +67,48 @@
         <translation>Чаты</translation>
     </message>
     <message>
-        <source>Recent conversations</source>
-        <translation>Недавние беседы</translation>
+        <source>No messages</source>
+        <translation>Нет сообщений</translation>
     </message>
     <message>
-        <source>No chats yet</source>
-        <translation>Пока нет чатов</translation>
+        <source>Can send messages</source>
+        <translation>Могу отправить сообщение</translation>
     </message>
     <message>
-        <source>Start a new conversation by tapping the &apos;+&apos; button</source>
-        <translation>Начните новый чат, нажав кнопку &apos;+&apos;</translation>
+        <source>Can&apos;t send messages</source>
+        <translation>Не могу отправить сообщение</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>вчера</translation>
+    </message>
+    <message>
+        <source>Sun</source>
+        <translation>Вс</translation>
+    </message>
+    <message>
+        <source>Mon</source>
+        <translation>Пн</translation>
+    </message>
+    <message>
+        <source>Tue</source>
+        <translation>Вт</translation>
+    </message>
+    <message>
+        <source>Wed</source>
+        <translation>Ср</translation>
+    </message>
+    <message>
+        <source>Thu</source>
+        <translation>Чт</translation>
+    </message>
+    <message>
+        <source>Fri</source>
+        <translation>Пт</translation>
+    </message>
+    <message>
+        <source>Sat</source>
+        <translation>Сб</translation>
     </message>
 </context>
 <context>

@@ -72,33 +72,68 @@
 <context>
     <name>ChatListPage</name>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="43"/>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="48"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="38"/>
         <source>Logout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="60"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="127"/>
+        <source>No messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="138"/>
+        <source>Can send messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="138"/>
+        <source>Can&apos;t send messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="181"/>
+        <source>yesterday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="183"/>
+        <source>Sun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="183"/>
+        <source>Mon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="183"/>
+        <source>Tue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="183"/>
+        <source>Wed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Thu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Fri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Sat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="33"/>
         <source>Chats</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="62"/>
-        <source>Recent conversations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="253"/>
-        <source>No chats yet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="261"/>
-        <source>Start a new conversation by tapping the &apos;+&apos; button</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
