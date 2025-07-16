@@ -2,7 +2,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Nemo.Notifications 1.0
 
-
 Page {
     id: aboutPage
     objectName: "aboutPage"
@@ -43,9 +42,9 @@ Page {
             }
 
             Image {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    source:  "/usr/share/icons/hicolor/128x128/apps/ru.neochapay.maximus.png"
-              }
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "/usr/share/icons/hicolor/128x128/apps/ru.neochapay.maximus.png"
+            }
             Label {
                 text: qsTr("Version") + " " + version
                 //text: qsTr("Version") + " 0.0.7"
@@ -81,7 +80,8 @@ Page {
 
                 // Пустой элемент для центрирования
                 Item {
-                    width: (parent.width - interfaceLabel.width - copyrightLabel.width - parent.spacing) / 2
+                    width: (parent.width - interfaceLabel.width
+                            - copyrightLabel.width - parent.spacing) / 2
                     height: 1
                 }
 
@@ -105,7 +105,8 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Item {
-                    width: (parent.width - interfaceLabel2.width - copyrightLabel2.width - parent.spacing) / 2
+                    width: (parent.width - interfaceLabel2.width
+                            - copyrightLabel2.width - parent.spacing) / 2
                     height: 1
                 }
 
@@ -116,12 +117,11 @@ Page {
 
                 Label {
                     id: copyrightLabel2
-                    text: qsTr("© Leonid Yurasov ")
+                    text: qsTr("© Leonid Yurasov, Nikolay Sinev")
                     color: Theme.highlightColor
                     anchors.verticalCenter: interfaceLabel.verticalCenter
                 }
             }
-
 
             Separator {
                 color: Theme.primaryColor
@@ -142,11 +142,11 @@ Page {
                 text: qsTr("Your help allows us to make this project better.")
             }
 
-
             Button {
                 text: "Boosty"
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: Qt.openUrlExternally("https://boosty.to/neochapay/donate")
+                onClicked: Qt.openUrlExternally(
+                               "https://boosty.to/neochapay/donate")
             }
             Separator {
                 color: Theme.primaryColor
@@ -160,7 +160,7 @@ Page {
             }
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width - 2*Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
                 font.pixelSize: Theme.fontSizeSmall
@@ -170,9 +170,9 @@ Page {
             Button {
                 text: "GitFlic"
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: Qt.openUrlExternally("https://github.com/neochapay/ru.neochapay.maximus")
+                onClicked: Qt.openUrlExternally(
+                               "https://github.com/neochapay/ru.neochapay.maximus")
             }
-
         }
     }
 }

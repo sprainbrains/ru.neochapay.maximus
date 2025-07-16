@@ -4,27 +4,27 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="37"/>
+        <location filename="../qml/pages/AboutPage.qml" line="36"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="40"/>
+        <location filename="../qml/pages/AboutPage.qml" line="39"/>
         <source>Maximus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="50"/>
+        <location filename="../qml/pages/AboutPage.qml" line="49"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="56"/>
+        <location filename="../qml/pages/AboutPage.qml" line="55"/>
         <source>Maximus not an official client for Max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="72"/>
+        <location filename="../qml/pages/AboutPage.qml" line="71"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
@@ -39,13 +39,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="114"/>
+        <location filename="../qml/pages/AboutPage.qml" line="115"/>
         <source>Minor interface edits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="119"/>
-        <source>© Leonid Yurasov </source>
+        <location filename="../qml/pages/AboutPage.qml" line="120"/>
+        <source>© Leonid Yurasov, Nikolay Sinev</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -72,33 +72,73 @@
 <context>
     <name>ChatListPage</name>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="43"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="39"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="48"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="44"/>
         <source>Logout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="60"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="128"/>
+        <source>No messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="138"/>
+        <source>Can send messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="138"/>
+        <source>Can&apos;t send messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="182"/>
+        <source>yesterday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Sun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Mon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Tue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="184"/>
+        <source>Wed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="185"/>
+        <source>Thu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="185"/>
+        <source>Fri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="185"/>
+        <source>Sat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="34"/>
         <source>Chats</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="62"/>
-        <source>Recent conversations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="253"/>
-        <source>No chats yet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="261"/>
-        <source>Start a new conversation by tapping the &apos;+&apos; button</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -147,17 +187,22 @@
 <context>
     <name>EntherPhonePage</name>
     <message>
-        <location filename="../qml/pages/EntherPhonePage.qml" line="30"/>
+        <location filename="../qml/pages/EntherPhonePage.qml" line="31"/>
         <source>Enther phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/EntherPhonePage.qml" line="38"/>
+        <location filename="../qml/pages/EntherPhonePage.qml" line="39"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/EntherPhonePage.qml" line="47"/>
         <source>+7XXXXXXXXXX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/EntherPhonePage.qml" line="44"/>
+        <location filename="../qml/pages/EntherPhonePage.qml" line="53"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>

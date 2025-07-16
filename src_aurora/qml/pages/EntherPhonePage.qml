@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
  *
@@ -16,7 +18,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
@@ -33,13 +34,21 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl(
+                                              "../pages/AboutPage.qml"))
+            }
+        }
+
         TextField {
             id: phoneNumberField
             placeholderText: qsTr("+7XXXXXXXXXX")
             anchors.centerIn: parent
         }
 
-        Button{
+        Button {
             id: sendPhoneButton
             text: qsTr("Send")
             width: phoneNumberField.width
@@ -53,4 +62,3 @@ Page {
         }
     }
 }
-
