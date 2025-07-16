@@ -26,6 +26,6 @@ CONFIG += auroraapp_i18n
 TRANSLATIONS += \
     translations/ru.neochapay.maximus.ts \
     translations/ru.neochapay.maximus-ru.ts
-
+    
 VERSION = $$system( egrep "^Version:\|^Release:" ../rpm/ru.neochapay.maximus.spec  |tr -d "[A-Z][a-z]: " | tr "\\\n" "-" | sed "s/\.$//g"| tr -d "[:space:]")
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
