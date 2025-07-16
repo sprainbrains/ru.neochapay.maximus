@@ -36,8 +36,8 @@
         <translation>Незначительные правки интерфейса</translation>
     </message>
     <message>
-        <source>© Leonid Yurasov </source>
-        <translation>© Леонид Юрасов</translation>
+        <source>© Leonid Yurasov, Nikolay Sinev</source>
+        <translation>Леонид Юрасов, Николай Синёв</translation>
     </message>
     <message>
         <source>Donate</source>
@@ -53,15 +53,11 @@
     </message>
     <message>
         <source>For suggestions, bugs and ideas visit </source>
-        <translation>Предложения, ошибки и идеи можно отправлять по адресу</translation>
+        <translation>Предложения, ошибки и идеи можно отправлять сюда</translation>
     </message>
 </context>
 <context>
     <name>ChatListPage</name>
-    <message>
-        <source>About</source>
-        <translation>О программе</translation>
-    </message>
     <message>
         <source>Logout</source>
         <translation>Выйти</translation>
@@ -71,16 +67,52 @@
         <translation>Чаты</translation>
     </message>
     <message>
-        <source>Recent conversations</source>
-        <translation>Недавние беседы</translation>
+        <source>No messages</source>
+        <translation>Нет сообщений</translation>
     </message>
     <message>
-        <source>No chats yet</source>
-        <translation>Пока нет чатов</translation>
+        <source>Can send messages</source>
+        <translation>Можно отправлять сообщения</translation>
     </message>
     <message>
-        <source>Start a new conversation by tapping the &apos;+&apos; button</source>
-        <translation>Начните новый чат, нажав кнопку &apos;+&apos;</translation>
+        <source>Can&apos;t send messages</source>
+        <translation>Нельзя отправлять сообщения</translation>
+    </message>
+    <message>
+        <source>yesterday</source>
+        <translation>вчера</translation>
+    </message>
+    <message>
+        <source>Sun</source>
+        <translation>Вс</translation>
+    </message>
+    <message>
+        <source>Mon</source>
+        <translation>Пн</translation>
+    </message>
+    <message>
+        <source>Tue</source>
+        <translation>Вт</translation>
+    </message>
+    <message>
+        <source>Wed</source>
+        <translation>Ср</translation>
+    </message>
+    <message>
+        <source>Thu</source>
+        <translation>Чт</translation>
+    </message>
+    <message>
+        <source>Fri</source>
+        <translation>Пт</translation>
+    </message>
+    <message>
+        <source>Sat</source>
+        <translation>Сб</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>О программе</translation>
     </message>
 </context>
 <context>
@@ -94,7 +126,7 @@
     <name>ControlMessageItem</name>
     <message>
         <source>connected to chat</source>
-        <translation> присоединился(-ась) к чату</translation>
+        <translation>присоединился(-ась) к чату</translation>
     </message>
 </context>
 <context>
@@ -132,6 +164,10 @@
     <message>
         <source>Send</source>
         <translation>Отправить</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>О программе</translation>
     </message>
 </context>
 <context>
