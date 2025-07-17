@@ -145,7 +145,7 @@
 <context>
     <name>ChatPage</name>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="47"/>
+        <location filename="../qml/pages/ChatPage.qml" line="38"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
