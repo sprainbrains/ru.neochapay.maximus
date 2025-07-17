@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Chat>("ru.neochapay.maximus", 1, 0, "Chat");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
+    view->rootContext()->setContextProperty("version", APP_VERSION);
     view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));
     view->show();
 
