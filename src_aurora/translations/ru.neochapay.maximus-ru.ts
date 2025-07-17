@@ -110,6 +110,10 @@
         <source>Sat</source>
         <translation>Сб</translation>
     </message>
+    <message>
+        <source>About</source>
+        <translation>О программе</translation>
+    </message>
 </context>
 <context>
     <name>ChatPage</name>
