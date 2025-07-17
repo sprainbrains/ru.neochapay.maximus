@@ -59,12 +59,12 @@
 <context>
     <name>ChatListPage</name>
     <message>
-        <source>Logout</source>
-        <translation>Выйти</translation>
-    </message>
-    <message>
         <source>Chats</source>
         <translation>Чаты</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Выйти</translation>
     </message>
     <message>
         <source>No messages</source>
@@ -72,11 +72,11 @@
     </message>
     <message>
         <source>Can send messages</source>
-        <translation>Могу отправить сообщение</translation>
+        <translation>Могу отправить сообщения</translation>
     </message>
     <message>
         <source>Can&apos;t send messages</source>
-        <translation>Не могу отправить сообщение</translation>
+        <translation>Не могу отправить сообщения</translation>
     </message>
     <message>
         <source>yesterday</source>
