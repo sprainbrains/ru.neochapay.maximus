@@ -72,7 +72,11 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
         }
         if(item->type() == Chat::DIALOG) {
             if(participant.userId() > 0) {
-                return participant.firstName();
+                if (participant.lastName().isEmpty()) {
+                    return participant.firstName();
+                } else {
+                    return participant.firstName() + " " + participant.lastName();
+                }
             }
         }
         return "Unknow user";

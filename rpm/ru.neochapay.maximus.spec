@@ -16,7 +16,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 
 %description
-Короткое описание моего приложения для ОС Аврора
+OpenSource клиент мессенджера максдля ОС Аврора
 
 %prep
 %autosetup

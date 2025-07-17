@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
  *
@@ -18,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtGraphicalEffects 1.0
@@ -25,6 +24,19 @@ import QtGraphicalEffects 1.0
 Page {
     id: chatListPage
     allowedOrientations: Orientation.All
+
+    property var avatarColors: [
+        ["#FF6B6B", "#FF8E53"], // Красный-оранжевый
+        ["#4ECDC4", "#556270"], // Бирюзовый-серый
+        ["#834d9b", "#d04ed6"], // Фиолетовый
+        ["#009FFF", "#ec2F4B"], // Синий-красный
+        ["#654ea3", "#eaafc8"], // Пурпурный-розовый
+        ["#00c6ff", "#0072ff"], // Голубой-синий
+        ["#f46b45", "#eea849"], // Оранжевый-желтый
+        ["#7F00FF", "#E100FF"], // Фиолетовый-розовый
+        ["#11998e", "#38ef7d"], // Зеленый
+        ["#FF416C", "#FF4B2B"]  // Розовый-красный
+    ]
 
     SilicaListView {
         id: listView
@@ -50,6 +62,7 @@ Page {
             id: listItem
             width: parent.width
             contentHeight: Theme.itemSizeLarge
+            property int unreadCount: 0//index % 3 === 0 ? 5 : 0 // Пример для теста
 
             Rectangle {
                 id: avatarContainer
@@ -61,6 +74,17 @@ Page {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
+                }
+
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0.0
+                        color: avatarColors[title.charCodeAt(0) % avatarColors.length][0]
+                    }
+                    GradientStop {
+                        position: 1.0
+                        color: avatarColors[title.charCodeAt(0) % avatarColors.length][1]
+                    }
                 }
 
                 Loader {
@@ -82,13 +106,14 @@ Page {
 
                 Label {
                     anchors.centerIn: parent
-                    text: title.charAt(0).toUpperCase()
+                    text: getInitials(title)
                     font.pixelSize: Theme.fontSizeLarge
                     font.bold: true
                     color: Theme.primaryColor
                     visible: !chatIcon || chatIcon.toString() === ""
                 }
             }
+
 
             Column {
                 id: contentColumn
@@ -101,6 +126,8 @@ Page {
                 }
                 spacing: Theme.paddingSmall / 2
 
+
+                //title and time
                 Row {
                     width: parent.width
 
@@ -122,25 +149,80 @@ Page {
                     }
                 }
 
-                Label {
-                    id: messageLabel
+
+                Row {
                     width: parent.width
-                    text: chatDescription || qsTr("No messages")
-                    color: Theme.secondaryColor
-                    font.pixelSize: Theme.fontSizeSmall
-                    truncationMode: TruncationMode.Fade
-                    maximumLineCount: 1
+                    spacing: Theme.paddingSmall
+
+
+                    Image {
+                        id: statusIcon
+                        source: "image://theme/icon-s-installed"
+                        width: Theme.fontSizeSmall
+                        height: Theme.fontSizeSmall
+                        visible: unreadCount === 0 && lastMessageTime !== ""
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Label {
+                        id: messageLabel
+                        width: parent.width
+                               - (unreadBadge.visible ? unreadBadge.width + Theme.paddingSmall : 0)
+                               - (statusIcon.visible ? statusIcon.width + Theme.paddingSmall : 0)
+
+                        text: chatDescription || qsTr("No messages")
+                        color: unreadCount > 0 ? Theme.primaryColor : Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeSmall
+                        truncationMode: TruncationMode.Fade
+                        maximumLineCount: 1
+                        // font.bold: unreadCount > 0
+                    }
+
+                    Rectangle {
+                        id: unreadBadge
+                        width: unreadCountLabel.implicitWidth + Theme.paddingSmall
+                        height: unreadCountLabel.implicitHeight + Theme.paddingSmall
+                        radius: height / 2
+                        color: Theme.highlightColor
+                        anchors.verticalCenter: messageLabel.verticalCenter
+                        visible: unreadCount > 0
+
+                        property bool isSingleDigit: unreadCount < 10
+                        onIsSingleDigitChanged: {
+                            if (isSingleDigit) {
+                                width = height
+                            }
+                        }
+                        Component.onCompleted: {
+                            if (isSingleDigit) {
+                                width = height
+                            }
+                        }
+
+                        Label {
+                            id: unreadCountLabel
+                            anchors.centerIn: parent
+                            text: unreadCount > 99 ? "99+" : unreadCount
+                            font.pixelSize: Theme.fontSizeTiny
+                            font.bold: true
+                            color: Theme.primaryColor
+                        }
+                    }
                 }
 
-                Label {
-                    id: statusLabel
+                Row {
                     width: parent.width
-                    text: canSendMessage ? qsTr("Can send messages") : qsTr(
-                                               "Can't send messages")
-                    color: canSendMessage ? Theme.highlightColor : Theme.secondaryColor
-                    font.pixelSize: Theme.fontSizeTiny
-                    //visible: chatDescription && chatDescription.toString() !== ""
-                    visible: false
+                    spacing: Theme.paddingSmall
+
+                    Label {
+                        id: statusLabel
+                        width: parent.width
+                        text: canSendMessage ? qsTr("Can send messages") : qsTr("Can't send messages")
+                        color: canSendMessage ? Theme.highlightColor : Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeTiny
+                        //visible: chatDescription && chatDescription.toString() !== ""
+                        visible: false
+                    }
                 }
             }
 
@@ -152,40 +234,51 @@ Page {
             }
 
             onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"), {
-                                          "chatTitle": title,
-                                          "currentChat": chatListModel.get(
-                                                             index)
-                                      })
+                chatTitle: title,
+                currentChat: chatListModel.get(index)
+            })
         }
 
         VerticalScrollDecorator {}
     }
 
+
+    function getInitials(title) {
+        if (!title) return "";
+        var words = title.trim().split(/\s+/);
+        if (words.length >= 2) {
+            return words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+        } else if (title.length >= 2) {
+            return title.substring(0, 2).toUpperCase();
+        }
+        return title.charAt(0).toUpperCase();
+    }
+
     function formatTime(dateTimeString) {
-        if (!dateTimeString)
-            return ""
+        if (!dateTimeString) return "";
 
-        var date = new Date(dateTimeString)
-        if (isNaN(date.getTime()))
-            return ""
 
-        var now = new Date()
-        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        var yesterday = new Date(today)
-        yesterday.setDate(yesterday.getDate() - 1)
-        var lastWeek = new Date(today)
-        lastWeek.setDate(lastWeek.getDate() - 7)
+        var date = new Date(dateTimeString);
+        if (isNaN(date.getTime())) return "";
+
+        var now = new Date();
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        var lastWeek = new Date(today);
+        lastWeek.setDate(lastWeek.getDate() - 7);
+
 
         if (date >= today) {
-            return Qt.formatTime(date, "hh:mm")
+            return Qt.formatTime(date, "hh:mm");
         } else if (date >= yesterday) {
-            return qsTr("yesterday")
+            return qsTr("yesterday");
         } else if (date >= lastWeek) {
-            var days = [qsTr("Sun"), qsTr("Mon"), qsTr("Tue"), qsTr(
-                            "Wed"), qsTr("Thu"), qsTr("Fri"), qsTr("Sat")]
-            return days[date.getDay()]
+            var days = [qsTr("Sun"), qsTr("Mon"), qsTr("Tue"), qsTr("Wed"),
+                            qsTr("Thu"), qsTr("Fri"), qsTr("Sat")];
+            return days[date.getDay()];
         } else {
-            return Qt.formatDate(date, "dd.MM.yy")
+            return Qt.formatDate(date, "dd.MM.yy");
         }
     }
 }

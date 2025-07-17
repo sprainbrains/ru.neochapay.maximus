@@ -36,10 +36,6 @@
         <translation>Незначительные правки интерфейса</translation>
     </message>
     <message>
-        <source>© Leonid Yurasov, Nikolay Sinev</source>
-        <translation>Леонид Юрасов, Николай Синёв</translation>
-    </message>
-    <message>
         <source>Donate</source>
         <translation>Поддержать</translation>
     </message>
@@ -53,18 +49,22 @@
     </message>
     <message>
         <source>For suggestions, bugs and ideas visit </source>
-        <translation>Предложения, ошибки и идеи можно отправлять сюда</translation>
+        <translation>Предложения, ошибки и идеи можно отправлять по адресу</translation>
+    </message>
+    <message>
+        <source>© Leonid Yurasov, Nikolay Sinev</source>
+        <translation>© Леонид Юрасов, Николай Синёв</translation>
     </message>
 </context>
 <context>
     <name>ChatListPage</name>
     <message>
-        <source>Logout</source>
-        <translation>Выйти</translation>
-    </message>
-    <message>
         <source>Chats</source>
         <translation>Чаты</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Выйти</translation>
     </message>
     <message>
         <source>No messages</source>
@@ -72,11 +72,11 @@
     </message>
     <message>
         <source>Can send messages</source>
-        <translation>Можно отправлять сообщения</translation>
+        <translation>Могу отправить сообщения</translation>
     </message>
     <message>
         <source>Can&apos;t send messages</source>
-        <translation>Нельзя отправлять сообщения</translation>
+        <translation>Не могу отправить сообщения</translation>
     </message>
     <message>
         <source>yesterday</source>
@@ -126,7 +126,7 @@
     <name>ControlMessageItem</name>
     <message>
         <source>connected to chat</source>
-        <translation>присоединился(-ась) к чату</translation>
+        <translation> присоединился(-ась) к чату</translation>
     </message>
 </context>
 <context>
@@ -167,7 +167,7 @@
     </message>
     <message>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation type="unfinished">О программе</translation>
     </message>
 </context>
 <context>
