@@ -26,21 +26,7 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     , m_messQueue(MessagesQueue::instance())
     , m_canFetchMore(true)
 {
-    m_connect = connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
-        if(message.opcode() == 49) {
-            loadMessagesList(message.payload());
-        }
-
-        if(message.opcode() == 128 || message.opcode() == 64) {
-            if(m_chat == nullptr) {
-                return;
-            }
-
-            if(message.payload()["chatId"].toDouble() == m_chat->chatId()) {
-                pushNewMessageToList(message.payload()["message"].toObject());
-            }
-        }
-    });
+    connect(m_messQueue, &MessagesQueue::messageReceived, this, &ChatMessagesModel::messagesHandler);
 
     m_hash.insert(Qt::UserRole, QByteArray("messageIcon"));
     m_hash.insert(Qt::UserRole+1, QByteArray("messageName"));
@@ -48,11 +34,32 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     m_hash.insert(Qt::UserRole+3, QByteArray("messageType"));
     m_hash.insert(Qt::UserRole+4, QByteArray("messageSenderId"));
     m_hash.insert(Qt::UserRole+5, QByteArray("messageExtendedData"));
+    m_hash.insert(Qt::UserRole+6, QByteArray("reactionsCount"));
+    m_hash.insert(Qt::UserRole+7, QByteArray("reactions"));
 }
 
 ChatMessagesModel::~ChatMessagesModel()
 {
-    QObject::disconnect(m_connect);
+    m_messages.clear();
+    disconnect(m_messQueue, &MessagesQueue::messageReceived, this, &ChatMessagesModel::messagesHandler);
+}
+
+
+void ChatMessagesModel::messagesHandler(RawApiMessage message)
+{
+    if(message.opcode() == 49) {
+        loadMessagesList(message.payload());
+    }
+
+    if(message.opcode() == 128 || message.opcode() == 64) {
+        if(m_chat == nullptr) {
+            return;
+        }
+
+        if(message.payload()["chatId"].toDouble() == m_chat->chatId()) {
+            pushNewMessageToList(message.payload()["message"].toObject());
+        }
+    }
 }
 
 int ChatMessagesModel::rowCount(const QModelIndex &parent) const
@@ -84,6 +91,10 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
         return item->sender()->userId();
     } else if (role == Qt::UserRole + 5) {
         return item->extendedData();
+    } else if (role == Qt::UserRole + 6) {
+        return item->reactionsCount();
+    } else if (role == Qt::UserRole + 7) {
+        return QVariant::fromValue(item->reactions());
     }
 
     return QVariant();
@@ -105,7 +116,9 @@ void ChatMessagesModel::fetchMore(const QModelIndex &index)
 
     if(m_messages.count() > 0) {
         ChatMessage* firstInModel = m_messages.first();
-        qDebug() << firstInModel->messageTime();
+        if(firstInModel == nullptr) {
+            return;
+        }
 
         lastEventTime = firstInModel->messageTime().toMSecsSinceEpoch();
     } else {
@@ -113,6 +126,7 @@ void ChatMessagesModel::fetchMore(const QModelIndex &index)
     }
     requsetChat(lastEventTime);
 }
+
 
 void ChatMessagesModel::requsetChat(qint64 lastEventTime)
 {

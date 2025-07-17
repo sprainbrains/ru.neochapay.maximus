@@ -19,6 +19,7 @@
 
 #include "usersession.h"
 
+#include <QCoreApplication>
 #include <QJsonArray>
 
 UserSession::UserSession(QObject *parent)
@@ -76,6 +77,12 @@ void UserSession::storeToken(QString token) {
     m_settings->setValue("token", token);
 }
 
+void UserSession::logout()
+{
+    m_settings->reset();
+    QCoreApplication::quit();
+}
+
 void UserSession::goNavigation(int from, int to)
 {
     m_actionId++;
@@ -115,6 +122,7 @@ void UserSession::updateSessionData(QJsonObject payload)
     QJsonObject profile = payload["profile"].toObject();
 
     updateProfile(profile);
+    emit userLogin();
 }
 
 void UserSession::updateOnStartData(QJsonObject payload)

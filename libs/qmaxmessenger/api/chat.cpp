@@ -35,13 +35,17 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
     m_created = jsonObject["created"].toInt();
     m_messages.push_back(new ChatMessage(jsonObject["lastMessage"].toObject()));
     if(jsonObject["type"].toString() == "DIALOG") {
-        m_type = Type::DIALOG;
+        m_type = ChatType::DIALOG;
     } else if(jsonObject["type"].toString() == "CHAT") {
-        m_type = Type::CHAT;
+        m_type = ChatType::CHAT;
+        m_chatTitle = jsonObject["title"].toString();
+        m_baseRawIconUrl = jsonObject["baseRawIconUrl"].toString();
+    } else if(jsonObject["type"].toString() == "CHANNEL") {
+        m_type = ChatType::CHANNEL;
         m_chatTitle = jsonObject["title"].toString();
         m_baseRawIconUrl = jsonObject["baseRawIconUrl"].toString();
     } else {
-        m_type = Type::UNKNOWTYPE;
+        m_type = ChatType::UNKNOWTYPE;
     }
     m_lastFireDelayedErrorTime = jsonObject["lastFireDelayedErrorTime"].toDouble();
     m_lastDelayedUpdateTime = jsonObject["lastDelayedUpdateTime"].toDouble();
@@ -55,6 +59,14 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
         m_status = Status::INACTIVE;
     } else {
         m_status = Status::UNKNOWSTATUS;
+    }
+
+    if(jsonObject["access"].toString() == "PUBLIC") {
+        m_access = Access::PUBLIC;
+    } else if(jsonObject["access"].toString() == "PRIVATE") {
+        m_access = Access::PRIVATE;
+    } else {
+        m_access = Access::UNKNOWACCESS;
     }
 
     foreach (QJsonValue participant, jsonObject["participants"].toObject().keys()) {
@@ -133,7 +145,7 @@ QDateTime Chat::modified() const
     return m_modified;
 }
 
-Chat::Type Chat::type() const
+Chat::ChatType Chat::type() const
 {
     return m_type;
 }
@@ -201,4 +213,14 @@ ChatMessage *Chat::pinnedMessage() const
 qint64 Chat::chatCid() const
 {
     return m_chatCid;
+}
+
+Chat::Access Chat::access() const
+{
+    return m_access;
+}
+
+int Chat::participantsCount() const
+{
+    return m_participantsCount;
 }

@@ -25,6 +25,7 @@
 #include <QVariant>
 
 #include "contact.h"
+#include "chatmessagereactions.h"
 
 class ChatMessage : public QObject
 {
@@ -39,6 +40,8 @@ class ChatMessage : public QObject
     // TODO:
     // type
     // attaches
+    Q_PROPERTY(int reactionsCount READ reactionsCount NOTIFY chatMessageChanged)
+    Q_PROPERTY(QList<ChatMessageReactions*> reactions READ reactions NOTIFY chatMessageChanged)
 
 public:
     struct ChatMessageElement
@@ -52,7 +55,9 @@ public:
         UnknowMessageType,
         TextMessage,
         ControlMessage,
-        PhotoMessage
+        PhotoMessage,
+        VideoMessage,
+        GalleryMessage
     };
 
     Q_ENUMS(MessageType)
@@ -71,6 +76,10 @@ public:
 
     const QVariant &extendedData() const;
 
+    const QList<ChatMessageReactions *> &reactions() const;
+
+    int reactionsCount() const;
+
 signals:
     void chatMessageChanged();
 
@@ -82,6 +91,8 @@ private:
     QList<ChatMessageElement> m_elements;
     MessageType m_messageType;
     QVariant m_extendedData;
+    QList<ChatMessageReactions*> m_reactions;
+    int m_reactionsCount;
 };
-
+Q_DECLARE_METATYPE(ChatMessage);
 #endif // CHATMESSAGE_H

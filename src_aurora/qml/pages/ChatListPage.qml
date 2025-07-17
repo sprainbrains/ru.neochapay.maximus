@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
  *
@@ -16,93 +18,174 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtGraphicalEffects 1.0
 
 Page {
-    objectName: "chatsListPage"
+    id: chatListPage
     allowedOrientations: Orientation.All
 
-    PageHeader {
-        id: header
-        objectName: "pageHeader"
-        title: qsTr("Chats")
-    }
-
     SilicaListView {
-        width: parent.width
-        height: parent.height - header.height
-        anchors.top:  header.bottom
-
+        id: listView
+        anchors.fill: parent
         model: chatListModel
+        header: PageHeader {
+            title: qsTr("Chats")
+        }
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl(
+                                              "../pages/AboutPage.qml"))
+            }
+            MenuItem {
+                text: qsTr("Logout")
+                onClicked: userSession.logout()
+            }
+        }
 
         delegate: ListItem {
             id: listItem
-            width: parent.width - Theme.paddingSmall*2
-            contentHeight: Theme.itemSizeMedium
-            clip: true
-
-            Image{
-                id: chatIconImage
-                width: parent.height - Theme.paddingSmall * 2
-                height: parent.height - Theme.paddingSmall * 2
-                source: chatIcon
-                fillMode: Image.PreserveAspectCrop
-                layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: mask
-                }
-
-                anchors{
-                    left: parent.left
-                    leftMargin: Theme.paddingSmall
-                    top: parent.top
-                    topMargin: Theme.paddingSmall
-                }
-            }
+            width: parent.width
+            contentHeight: Theme.itemSizeLarge
 
             Rectangle {
-                id: mask
-                width: chatIconImage.width
-                height: chatIconImage.width
-                radius: chatIconImage.width/2
-                visible: chatIconImage.source == ""
-                anchors.centerIn: chatIconImage
-                color: "white"
-            }
+                id: avatarContainer
+                width: Theme.itemSizeMedium - Theme.paddingMedium
+                height: width
+                radius: width / 2
+                color: Theme.rgba(Theme.secondaryHighlightColor, 0.2)
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    verticalCenter: parent.verticalCenter
+                }
 
-            Label {
-                 id: chatName
-                 text: title
+                Loader {
+                    anchors.fill: parent
+                    active: chatIcon && chatIcon.toString() !== ""
+                    sourceComponent: Image {
+                        source: chatIcon
+                        fillMode: Image.PreserveAspectCrop
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                width: avatarContainer.width
+                                height: avatarContainer.width
+                                radius: avatarContainer.radius
+                            }
+                        }
+                    }
+                }
 
-                 anchors{
-                     left: chatIconImage.right
-                     leftMargin: Theme.paddingSmall
-                     top: parent.top
-                     topMargin: Theme.paddingSmall
-                 }
-             }
-
-            Label {
-                id: chatDescriptionLabel
-                text: chatDescription
-                font.pixelSize: Theme.fontSizeSmall
-                width: listItem.width - chatIconImage.width - Theme.paddingSmall*3
-                anchors{
-                    left: chatIconImage.right
-                    leftMargin: Theme.paddingSmall
-                    top: chatName.bottom
-                    topMargin: Theme.paddingSmall
+                Label {
+                    anchors.centerIn: parent
+                    text: title.charAt(0).toUpperCase()
+                    font.pixelSize: Theme.fontSizeLarge
+                    font.bold: true
+                    color: Theme.primaryColor
+                    visible: !chatIcon || chatIcon.toString() === ""
                 }
             }
 
-            onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"),
-                                      {
-                                          currentChat: chatListModel.get(index)
+            Column {
+                id: contentColumn
+                anchors {
+                    left: avatarContainer.right
+                    leftMargin: Theme.paddingLarge
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                    verticalCenter: parent.verticalCenter
+                }
+                spacing: Theme.paddingSmall / 2
+
+                Row {
+                    width: parent.width
+
+                    Label {
+                        id: chatName
+                        width: parent.width - timeLabel.width
+                        text: title
+                        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        font.pixelSize: Theme.fontSizeMedium
+                        truncationMode: TruncationMode.Fade
+                    }
+
+                    Label {
+                        id: timeLabel
+                        text: formatTime(lastMessageTime)
+                        color: Theme.secondaryColor
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        anchors.verticalCenter: chatName.verticalCenter
+                    }
+                }
+
+                Label {
+                    id: messageLabel
+                    width: parent.width
+                    text: chatDescription || qsTr("No messages")
+                    color: Theme.secondaryColor
+                    font.pixelSize: Theme.fontSizeSmall
+                    truncationMode: TruncationMode.Fade
+                    maximumLineCount: 1
+                }
+
+                Label {
+                    id: statusLabel
+                    width: parent.width
+                    text: canSendMessage ? qsTr("Can send messages") : qsTr(
+                                               "Can't send messages")
+                    color: canSendMessage ? Theme.highlightColor : Theme.secondaryColor
+                    font.pixelSize: Theme.fontSizeTiny
+                    //visible: chatDescription && chatDescription.toString() !== ""
+                    visible: false
+                }
+            }
+
+            Separator {
+                width: parent.width
+                anchors.bottom: parent.bottom
+                color: Theme.primaryColor
+                opacity: 0.1
+            }
+
+            onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"), {
+                                          "chatTitle": title,
+                                          "currentChat": chatListModel.get(
+                                                             index)
                                       })
+        }
+
+        VerticalScrollDecorator {}
+    }
+
+    function formatTime(dateTimeString) {
+        if (!dateTimeString)
+            return ""
+
+        var date = new Date(dateTimeString)
+        if (isNaN(date.getTime()))
+            return ""
+
+        var now = new Date()
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        var yesterday = new Date(today)
+        yesterday.setDate(yesterday.getDate() - 1)
+        var lastWeek = new Date(today)
+        lastWeek.setDate(lastWeek.getDate() - 7)
+
+        if (date >= today) {
+            return Qt.formatTime(date, "hh:mm")
+        } else if (date >= yesterday) {
+            return qsTr("yesterday")
+        } else if (date >= lastWeek) {
+            var days = [qsTr("Sun"), qsTr("Mon"), qsTr("Tue"), qsTr(
+                            "Wed"), qsTr("Thu"), qsTr("Fri"), qsTr("Sat")]
+            return days[date.getDay()]
+        } else {
+            return Qt.formatDate(date, "dd.MM.yy")
         }
     }
 }
-

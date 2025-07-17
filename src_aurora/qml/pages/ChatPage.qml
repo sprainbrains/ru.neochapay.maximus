@@ -29,6 +29,7 @@ Page {
     id: chatListPage
     objectName: "chatsListPage"
     allowedOrientations: Orientation.All
+    property alias chatTitle: header.title
 
     PageHeader {
         id: header
@@ -37,21 +38,59 @@ Page {
     }
 
     property var currentChat
-    property var lastEventTime
+    property bool showPopup: false
+
+    // Background dimmer
+    Rectangle {
+        visible: showPopup
+        anchors.fill: parent
+        z: 10
+        color: "#80000000"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: showPopup = false
+        }
+    }
+
+    Rectangle {
+        visible: showPopup
+        width: parent.width
+        height: parent.height / 4
+        z: 11
+        radius: chatMessageImage.width / 2
+        anchors{
+            bottom: sendMessageRow.top
+            left: parent.left
+            leftMargin: Theme.paddingSmall
+            rightMargin: Theme.paddingSmall
+        }
+
+        color: "white"
+        border.color: "gray"
+
+        EmojiPicker {
+            id: emojiPicker
+            model: emojiModel
+            editor: messageTextField
+            anchors.fill: parent
+        }
+    }
 
     function extractTextWithEmojis(htmlString) {
-        const textMatch = htmlString.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-          if (!textMatch) return '';
+        const decodedString = htmlString.replace('<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" width="5" height="1"/>', '');
+        const textMatch = decodedString.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+        if (!textMatch) return '';
 
-          const pContent = textMatch[1];
-          var result = '';
+        const pContent = textMatch[1];
+        var result = '';
 
-          // Process text nodes and img tags
-          var lastIndex = 0;
-          const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
-          var imgMatch;
+        // Process text nodes and img tags
+        var lastIndex = 0;
+        const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
+        var imgMatch;
 
-          while ((imgMatch = imgRegex.exec(pContent)) !== null) {
+        while ((imgMatch = imgRegex.exec(pContent)) !== null) {
             // Add text before the image
             result += pContent.slice(lastIndex, imgMatch.index);
             lastIndex = imgRegex.lastIndex;
@@ -61,25 +100,25 @@ Page {
             const emojiMatch = src.match(/([0-9a-f]+)\.svg$/i);
             if (emojiMatch) {
                 const codePoint = parseInt(emojiMatch[1], 16);
-                      // Alternative to fromCodePoint for older environments
-                      if (codePoint <= 0xFFFF) {
-                        result += String.fromCharCode(codePoint);
-                      } else {
-                        // For code points beyond BMP (Basic Multilingual Plane)
-                        const offset = codePoint - 0x10000;
-                        result += String.fromCharCode(
-                          0xD800 + (offset >> 10),
-                          0xDC00 + (offset & 0x3FF)
-                        );
-                      }
-                    }
-          }
+                // Alternative to fromCodePoint for older environments
+                if (codePoint <= 0xFFFF) {
+                    result += String.fromCharCode(codePoint);
+                } else {
+                    // For code points beyond BMP (Basic Multilingual Plane)
+                    const offset = codePoint - 0x10000;
+                    result += String.fromCharCode(
+                                0xD800 + (offset >> 10),
+                                0xDC00 + (offset & 0x3FF)
+                                );
+                }
+            }
+        }
 
-          // Add remaining text after last image
-          result += pContent.slice(lastIndex);
+        // Add remaining text after last image
+        result += pContent.slice(lastIndex);
 
-          // Clean up HTML entities and tags if needed
-          return result.replace(/&[^;]+;/g, '').replace(/<[^>]+>/g, '');
+        // Clean up HTML entities and tags if needed
+        return result.replace(/&[^;]+;/g, '').replace(/<[^>]+>/g, '');
     }
 
     BusyIndicator {
@@ -126,47 +165,58 @@ Page {
     }
 
     EmojiModel {
-            id: emojiModel
-            iconsPath: '../emojiSvgs/'
-            iconsType: '.svg'
-        }
-
-    Rectangle {
-            id: body
-            width: 400
-            height: 420
-            radius: 10
-            anchors.top: parent.top
-            anchors.topMargin: 40
-            anchors.horizontalCenter: parent.horizontalCenter
-            EmojiPicker {
-                id: emojiPicker
-                model: emojiModel
-                editor: messageTextField
-                anchors.fill: parent
-            }
-        }
+        id: emojiModel
+        iconsPath: '../emojiSvgs/'
+        iconsType: '.svg'
+    }
 
     Item{
         id: sendMessageRow
         width: parent.width
-        height: Theme.iconSizeExtraLarge
+        height: visible ? Theme.iconSizeMedium : 0
         anchors.bottom: chatListPage.bottom
+        visible: currentChat.type !== Chat.CHANNEL;
 
         TextEdit{
+
             id: messageTextField
             focus: true
-            width: parent.width - sendButton.width - Theme.paddingSmall*2
+            width: parent.width - sendButton.width - emojiButton.width - Theme.paddingSmall*2
             height: parent.height - Theme.paddingSmall*2
+            verticalAlignment:  TextEdit.AlignVCenter
+            //height: parent.height - Theme.paddingSmall*2
             wrapMode: TextEdit.Wrap
             textFormat: TextEdit.RichText
+            color: Theme.secondaryColor
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
-                left: parent.left
+                left: emojiButton.right
                 leftMargin: Theme.paddingSmall
             }
         }
+
+
+        IconButton {
+            id: emojiButton
+            width: parent.height - Theme.paddingSmall * 2
+            height: parent.height - Theme.paddingSmall * 2
+            icon.source: "image://theme/icon-m-send?" + (pressed
+                                                         ? Theme.highlightColor
+                                                         : Theme.primaryColor)
+            anchors{
+                top: parent.top
+                topMargin: Theme.paddingSmall
+                //right: messageTextField.left
+                left: parent.left
+                leftMargin: Theme.paddingSmall
+            }
+            onClicked: {
+                showPopup = true
+                console.log("emoji!!")
+            }
+        }
+
 
         IconButton {
             id: sendButton

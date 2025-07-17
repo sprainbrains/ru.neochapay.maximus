@@ -19,3 +19,7 @@ build-stamp
 apisecrets.h
 *.user*
 build*
+*.DS_Store
+*.apptool
+RPMS
+RPMS/*

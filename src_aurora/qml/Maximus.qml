@@ -51,6 +51,14 @@ ApplicationWindow {
                 pageStack.push(Qt.resolvedUrl("pages/ChatListPage.qml"))
             }
         }
+
+        onUserLogin: serverConnection.requestDataSync();
+
+        onUserLogout: {
+            pageStack.clear();
+            pageStack.replace(Qt.resolvedUrl("pages/EntherPhonePage.qml"))
+            userSession.coldStart()
+        }
     }
 
     ChatsListModel{

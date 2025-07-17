@@ -37,6 +37,7 @@ ChatsListModel::ChatsListModel(QObject *parent)
     m_hash.insert(Qt::UserRole + 3, QByteArray("lastMessageTime"));
     m_hash.insert(Qt::UserRole + 4, QByteArray("chatIcon"));
     m_hash.insert(Qt::UserRole + 5, QByteArray("lastEventTime"));
+    m_hash.insert(Qt::UserRole + 6, QByteArray("canSendMessage"));
 }
 
 int ChatsListModel::rowCount(const QModelIndex &parent) const
@@ -56,6 +57,9 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     }
 
     Chat* item = m_chats.at(index.row());
+    if(item == nullptr) {
+        return QVariant();
+    }
     Contact participant;
     if(item->type() == Chat::DIALOG && item->participants().count() > 0) {
         participant = item->participants().first();
@@ -63,7 +67,7 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     if (role == Qt::UserRole) {
         return item->chatId();
     } else if (role == Qt::UserRole + 1) {
-        if(item->type() == Chat::CHAT) {
+        if(item->type() == Chat::CHAT || item->type() == Chat::CHANNEL) {
             return item->chatTitle();
         }
         if(item->type() == Chat::DIALOG) {
@@ -77,7 +81,7 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 3) {
         return item->messages().last()->messageTime();
     } else if (role == Qt::UserRole + 4) {
-        if(item->type() == Chat::CHAT) {
+        if(item->type() == Chat::CHAT || item->type() == Chat::CHANNEL) {
             return item->baseRawIconUrl();
         }
         if(item->type() == Chat::DIALOG) {
@@ -88,6 +92,8 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     } else if (role == Qt::UserRole + 5) {
         return item->lastEventTime();
+    } else if (role == Qt::UserRole + 6) {
+        return item->type() != Chat::CHANNEL;
     }
 
     return QVariant();

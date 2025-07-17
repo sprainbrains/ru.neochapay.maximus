@@ -36,12 +36,15 @@ public:
     int userId() const;
     Q_INVOKABLE void coldStart();
     Q_INVOKABLE void storeToken(QString token);
+    Q_INVOKABLE void logout();
 
     QString authToken();
 
 signals:
     void userIdChanged();
     void authTokenChanged();
+    void userLogin();
+    void userLogout();
 
 private:
     void goNavigation(int from, int to);

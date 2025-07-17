@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
  *
@@ -16,7 +18,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtGraphicalEffects 1.0
@@ -25,9 +26,13 @@ import ru.neochapay.maximus 1.0
 
 Item {
     id: listItem
-    height: isMyMessage ? messageBackground.height + Theme.paddingLarge * 2 : chatMessageAuthor.height + messageBackground.height + Theme.paddingLarge * 4
+    height: isMyMessage ? messageBackground.height + Theme.paddingLarge
+                          * 2 : chatMessageAuthor.height
+                          + messageBackground.height + Theme.paddingLarge * 4
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
+    property var message
+
 
     function getCodePoint(chars) {
       if (chars.length === 1) {
@@ -55,7 +60,8 @@ Item {
           const codePoint = getCodePoint(charS).toString(16);
 
           // Create the img tag
-          htmlParts.push('<img src="file:///usr/share/ru.neochapay.maximus/qml/emojiSvgs/' + codePoint +'.svg" width="20" height="20" style="vertical-align: top;" />');
+          htmlParts.push('<img src="file:///usr/share/ru.neochapay.maximus/qml/emojiSvgs/' + codePoint +'.svg" width="40" height="40"/>');
+          htmlParts.push(' ');
         } else {
           // Regular text character
           htmlParts.push(charS);
@@ -74,8 +80,7 @@ Item {
       return msg
     }
 
-
-    Image{
+    Image {
         id: chatMessageImage
         width: Theme.itemSizeMedium - Theme.paddingSmall * 2
         height: Theme.itemSizeMedium - Theme.paddingSmall * 2
@@ -87,7 +92,7 @@ Item {
         }
         visible: !isMyMessage
 
-        anchors{
+        anchors {
             left: parent.left
             leftMargin: Theme.paddingLarge
             top: parent.top
@@ -99,7 +104,7 @@ Item {
         id: mask
         width: chatMessageImage.width
         height: chatMessageImage.width
-        radius: chatMessageImage.width/2
+        radius: chatMessageImage.width / 2
         visible: chatMessageImage.source == ""
         anchors.centerIn: chatMessageImage
         color: "white"
@@ -111,7 +116,7 @@ Item {
         visible: !isMyMessage
         font.pixelSize: Theme.fontSizeSmall
 
-        anchors{
+        anchors {
             left: chatMessageImage.right
             leftMargin: Theme.paddingLarge
             top: parent.top
@@ -119,20 +124,24 @@ Item {
         }
     }
 
-    Rectangle{
+    Rectangle {
         id: messageBackground
-        color: Theme.highlightBackgroundColor
-        width: messageType == ChatMessage.PhotoMessage
-               ? postImage.width + Theme.paddingLarge * 2
-               : chatMessageText.width + Theme.paddingLarge * 2
+        color: isMyMessage ? Theme.rgba(Theme.highlightBackgroundColor,
+                                        0.3) : Theme.rgba(
+                                 Theme.secondaryHighlightColor, 0.2)
+        width: messageType
+               == ChatMessage.PhotoMessage ? postImage.width + Theme.paddingLarge
+                                             * 2 : chatMessageText.width + Theme.paddingLarge * 2
 
-        height: messageType == ChatMessage.PhotoMessage
-                    ? chatMessageText.height + postImage.height + Theme.paddingLarge * 3
-                    : chatMessageText.height + Theme.paddingLarge * 2
+        height: messageType
+                == ChatMessage.PhotoMessage ? chatMessageText.height + reactionsCounter.height
+                                              + postImage.height + Theme.paddingLarge
+                                              * 3 : chatMessageText.height
+                                              + reactionsCounter.height + Theme.paddingLarge * 3
 
         radius: Theme.paddingLarge / 2
 
-        anchors{
+        anchors {
             left: isMyMessage ? undefined : chatMessageImage.right
             leftMargin: Theme.paddingLarge
             right: isMyMessage ? parent.right : undefined
@@ -147,7 +156,7 @@ Item {
             width: listItem.width * 0.6
             fillMode: Image.PreserveAspectFit
             visible: messageType == ChatMessage.PhotoMessage
-            anchors{
+            anchors {
                 left: parent.left
                 leftMargin: Theme.paddingLarge
                 top: parent.top
@@ -157,17 +166,57 @@ Item {
 
         Label {
             id: chatMessageText
-            text: convertToOriginalHtml(messageText)
-            visible: chatMessageText.text.length > 0
+            text: convertToOriginalHtml(formatLinks(messageText))
+            visible: text.length > 0
             width: listItem.width * 0.6
             font.pixelSize: Theme.fontSizeMedium
             wrapMode: Text.WordWrap
-            textFormat: TextEdit.RichText
-            anchors{
+            anchors {
                 left: parent.left
                 leftMargin: Theme.paddingLarge
                 top: messageType == ChatMessage.PhotoMessage ? postImage.bottom : parent.top
                 topMargin: Theme.paddingLarge
+            }
+            onLinkActivated: Qt.openUrlExternally(link)
+
+            textFormat: Text.RichText
+            linkColor: Theme.rgba(Theme.secondaryHighlightFromColor(), 0.7)
+
+            function formatLinks(text) {
+                if (!text)
+                    return ""
+
+                text = text.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,
+                                    function (url) {
+                                        var href = url.indexOf(
+                                                    'http') === 0 ? url : 'http://' + url
+                                        return '<a href="' + href + '">' + url + '</a>'
+                                    })
+
+                // Форматирование email-адресов
+                text = text.replace(
+                            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
+                            '<a href="mailto:$1">$1</a>')
+                // Форматирование телефонных номеров (международный формат)
+                text = text.replace(/(\+?[\d\s\-\(\)]{7,}\d)/g,
+                                    function (phone) {
+                                        var cleanPhone = phone.replace(
+                                                    /[^\d\+]/g, '')
+                                        return '<a href="tel:' + cleanPhone + '">' + phone + '</a>'
+                                    })
+                return text
+            }
+        }
+
+        Item {
+            id: reactionsCounter
+            visible: reactionsCount > 0
+
+            anchors {
+                top: chatMessageText.bottom
+                topMargin: Theme.paddingLarge
+                right: parent.right
+                rightMargin: Theme.paddingLarge
             }
         }
     }

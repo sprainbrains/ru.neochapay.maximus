@@ -51,12 +51,14 @@ signals:
     void chatLoaded();
     void chatChanged();
 
+private slots:
+    void messagesHandler(RawApiMessage message);
+
 private:
     void loadMessagesList(QJsonObject payload);
     void pushNewMessageToList(QJsonObject message);
 
     MessagesQueue* m_messQueue;
-    QMetaObject::Connection m_connect;
 
     QHash<int, QByteArray> m_hash;
     QList<ChatMessage*> m_messages;
