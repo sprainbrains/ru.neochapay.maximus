@@ -24,6 +24,9 @@ import QtGraphicalEffects 1.0
 
 import ru.neochapay.maximus 1.0
 
+import "../jsFunctions/emoji.js" as EmojiFunc
+
+
 Item {
     id: listItem
     height: isMyMessage ? messageBackground.height + Theme.paddingLarge
@@ -32,53 +35,6 @@ Item {
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
     property var message
-
-
-    function getCodePoint(chars) {
-      if (chars.length === 1) {
-        return chars.charCodeAt(0);
-      }
-      // Handle surrogate pairs
-      const high = chars.charCodeAt(0);
-      const low = chars.charCodeAt(1);
-      return (high - 0xD800) * 0x400 + (low - 0xDC00) + 0x10000;
-    }
-
-    function convertToOriginalHtml(textWithEmojis) {
-      // This regex matches emoji characters and captures their code points
-      const emojiRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])|./g;
-
-      var htmlParts = [];
-      var match;
-
-      while ((match = emojiRegex.exec(textWithEmojis)) !== null) {
-        const charS = match[0];
-
-        // Check if it's an emoji (surrogate pair or single char)
-        if (charS.length === 2 || getCodePoint(charS) > 0xFFFF) {
-          // Get the code point (works for both single and surrogate pairs)
-          const codePoint = getCodePoint(charS).toString(16);
-
-          // Create the img tag
-          htmlParts.push('<img src="file:///usr/share/ru.neochapay.maximus/qml/emojiSvgs/' + codePoint +'.svg" width="40" height="40"/>');
-          htmlParts.push(' ');
-        } else {
-          // Regular text character
-          htmlParts.push(charS);
-        }
-      }
-
-      const msg  = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-                     <html><head><meta name="qrichtext" content="1" /><style type="text/css">
-                     p, li { white-space: pre-wrap; }
-                     </style></head><body style=" font-family:\'ALS Hauss Variable\'; font-size:32px; font-weight:400; font-style:normal;">
-                     <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">'+ htmlParts.join('') +'</p></body></html>';
-
-      // Construct the full HTML structure
-
-      console.log(msg)
-      return msg
-    }
 
     Image {
         id: chatMessageImage
@@ -166,7 +122,8 @@ Item {
 
         Label {
             id: chatMessageText
-            text: convertToOriginalHtml(formatLinks(messageText))
+            z:20
+            text: EmojiFunc.convertToOriginalHtml(formatLinks(messageText))
             visible: text.length > 0
             width: listItem.width * 0.6
             font.pixelSize: Theme.fontSizeMedium

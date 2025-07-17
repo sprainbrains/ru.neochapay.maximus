@@ -23,6 +23,7 @@ import QtGraphicalEffects 1.0
 
 import ru.neochapay.maximus 1.0
 import EmojiModel 1.0
+import "../jsFunctions/emoji.js" as EmojiFunc
 
 
 Page {
@@ -40,6 +41,7 @@ Page {
     property var currentChat
     property bool showPopup: false
 
+
     // Background dimmer
     Rectangle {
         visible: showPopup
@@ -49,14 +51,16 @@ Page {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: showPopup = false
+            onClicked:{
+                showPopup = false
+            }
         }
     }
 
     Rectangle {
         visible: showPopup
         width: parent.width
-        height: parent.height / 4
+        height: parent.height / 3
         z: 11
         radius: chatMessageImage.width / 2
         anchors{
@@ -77,50 +81,6 @@ Page {
         }
     }
 
-    function extractTextWithEmojis(htmlString) {
-        const decodedString = htmlString.replace('<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" width="5" height="1"/>', '');
-        const textMatch = decodedString.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-        if (!textMatch) return '';
-
-        const pContent = textMatch[1];
-        var result = '';
-
-        // Process text nodes and img tags
-        var lastIndex = 0;
-        const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
-        var imgMatch;
-
-        while ((imgMatch = imgRegex.exec(pContent)) !== null) {
-            // Add text before the image
-            result += pContent.slice(lastIndex, imgMatch.index);
-            lastIndex = imgRegex.lastIndex;
-
-            // Process image
-            const src = imgMatch[1];
-            const emojiMatch = src.match(/([0-9a-f]+)\.svg$/i);
-            if (emojiMatch) {
-                const codePoint = parseInt(emojiMatch[1], 16);
-                // Alternative to fromCodePoint for older environments
-                if (codePoint <= 0xFFFF) {
-                    result += String.fromCharCode(codePoint);
-                } else {
-                    // For code points beyond BMP (Basic Multilingual Plane)
-                    const offset = codePoint - 0x10000;
-                    result += String.fromCharCode(
-                                0xD800 + (offset >> 10),
-                                0xDC00 + (offset & 0x3FF)
-                                );
-                }
-            }
-        }
-
-        // Add remaining text after last image
-        result += pContent.slice(lastIndex);
-
-        // Clean up HTML entities and tags if needed
-        return result.replace(/&[^;]+;/g, '').replace(/<[^>]+>/g, '');
-    }
-
     BusyIndicator {
         id: spinner
         size: BusyIndicatorSize.Large
@@ -137,6 +97,12 @@ Page {
         }
     }
 
+    EmojiModel {
+        id: emojiModel
+        iconsPath: '../emojiSvgs/'
+        iconsType: '.svg'
+    }
+
     SilicaListView {
         id: messagesListView
         width: parent.width
@@ -145,6 +111,11 @@ Page {
         model: chatMessagesModel
         clip: true
 
+        MouseArea {
+            anchors.fill: parent
+            z: -1  // Put behind delegates
+            onClicked: messagesListView.forceActiveFocus()
+        }
         property bool needToUpdate: true
 
         onCountChanged: {
@@ -152,6 +123,7 @@ Page {
         }
 
         delegate: Loader{
+            z: 1
             Component.onCompleted: {
                 if(messageType == ChatMessage.TextMessage || messageType == ChatMessage.PhotoMessage) {
                     source = "../components/TextMessageItem.qml";
@@ -164,28 +136,20 @@ Page {
         }
     }
 
-    EmojiModel {
-        id: emojiModel
-        iconsPath: '../emojiSvgs/'
-        iconsType: '.svg'
-    }
-
     Item{
         id: sendMessageRow
         width: parent.width
-        height: visible ? Theme.iconSizeMedium : 0
+        height: visible ? Theme.iconSizeLarge : 0
         anchors.bottom: chatListPage.bottom
         visible: currentChat.type !== Chat.CHANNEL;
 
         TextEdit{
-
             id: messageTextField
-            focus: true
-            width: parent.width - sendButton.width - emojiButton.width - Theme.paddingSmall*2
+            clip: true
+            width: parent.width - sendButton.width - emojiButton.width - Theme.paddingSmall*4
             height: parent.height - Theme.paddingSmall*2
             verticalAlignment:  TextEdit.AlignVCenter
-            //height: parent.height - Theme.paddingSmall*2
-            wrapMode: TextEdit.Wrap
+            wrapMode: TextEdit.NoWrap
             textFormat: TextEdit.RichText
             color: Theme.secondaryColor
             anchors{
@@ -194,26 +158,46 @@ Page {
                 left: emojiButton.right
                 leftMargin: Theme.paddingSmall
             }
+
+            Keys.onReturnPressed: event.accepted = true
+            Keys.onEnterPressed: event.accepted = true
+
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                    bottomMargin: Theme.paddingSmall
+                }
+                height: 2  // Underline thickness
+                color: messageTextField.activeFocus ? Theme.highlightColor : Theme.primaryColor  // Blue when focused, gray otherwise
+
+                Behavior on color {
+                    ColorAnimation { duration: 200 }  // Smooth color transition
+                }
+            }
         }
 
 
         IconButton {
             id: emojiButton
-            width: parent.height - Theme.paddingSmall * 2
-            height: parent.height - Theme.paddingSmall * 2
-            icon.source: "image://theme/icon-m-send?" + (pressed
+            width: sendButton.width
+            height: sendButton.height
+            icon.fillMode: Image.PreserveAspectFit
+            icon.source: "../icons/emoji-smiley.svg?" + (pressed
                                                          ? Theme.highlightColor
                                                          : Theme.primaryColor)
+            icon.width: width * 0.4
+            icon.height: height * 0.4
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
-                //right: messageTextField.left
                 left: parent.left
                 leftMargin: Theme.paddingSmall
             }
             onClicked: {
                 showPopup = true
-                console.log("emoji!!")
+                //console.log("emoji!!")
             }
         }
 
@@ -232,8 +216,8 @@ Page {
                 leftMargin: Theme.paddingSmall
             }
             onClicked: {
-                console.log("text a ", extractTextWithEmojis(messageTextField.text));
-                serverConnection.sendMessage(currentChat, extractTextWithEmojis(messageTextField.text))
+                //console.log("text a ", extractTextWithEmojis(messageTextField.text));
+                serverConnection.sendMessage(currentChat, EmojiFunc.extractTextWithEmojis(messageTextField.text))
                 messageTextField.text = ""
             }
         }
