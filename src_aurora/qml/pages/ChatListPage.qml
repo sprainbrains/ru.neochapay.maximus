@@ -217,7 +217,7 @@ Page {
                         font.pixelSize: Theme.fontSizeTiny
                         //visible: chatDescription && chatDescription.toString() !== ""
                         visible: false
-
+                    }
                 }
             }
 
