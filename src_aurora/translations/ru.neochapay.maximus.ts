@@ -70,75 +70,28 @@
     </message>
 </context>
 <context>
+    <name>ChatListItem</name>
+    <message>
+        <location filename="../qml/components/ChatListItem.qml" line="99"/>
+        <source>No messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ChatListPage</name>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="51"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="34"/>
+        <source>Chats</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatListPage.qml" line="39"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="56"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="43"/>
         <source>Logout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="173"/>
-        <source>No messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="220"/>
-        <source>Can send messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="220"/>
-        <source>Can&apos;t send messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="275"/>
-        <source>yesterday</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="277"/>
-        <source>Sun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="277"/>
-        <source>Mon</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="277"/>
-        <source>Tue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="277"/>
-        <source>Wed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="278"/>
-        <source>Thu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="278"/>
-        <source>Fri</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="278"/>
-        <source>Sat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="46"/>
-        <source>Chats</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -212,6 +165,49 @@
     <message>
         <location filename="../qml/components/UnsupportedMessage.qml" line="30"/>
         <source>Unsupported message</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utils</name>
+    <message>
+        <location filename="../qml/js/Utils.js" line="47"/>
+        <source>yesterday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="49"/>
+        <source>Sun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="49"/>
+        <source>Mon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="49"/>
+        <source>Tue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="49"/>
+        <source>Wed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="50"/>
+        <source>Thu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="50"/>
+        <source>Fri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="50"/>
+        <source>Sat</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
