@@ -36,10 +36,6 @@
         <translation>Незначительные правки интерфейса</translation>
     </message>
     <message>
-        <source>© Leonid Yurasov </source>
-        <translation>© Леонид Юрасов</translation>
-    </message>
-    <message>
         <source>Donate</source>
         <translation>Поддержать</translation>
     </message>
@@ -54,6 +50,10 @@
     <message>
         <source>For suggestions, bugs and ideas visit </source>
         <translation>Предложения, ошибки и идеи можно отправлять по адресу</translation>
+    </message>
+    <message>
+        <source>© Leonid Yurasov, Nikolay Sinev</source>
+        <translation>© Леонид Юрасов, Николай Синёв</translation>
     </message>
 </context>
 <context>
@@ -160,6 +160,10 @@
     <message>
         <source>Send</source>
         <translation>Отправить</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation type="unfinished">О программе</translation>
     </message>
 </context>
 <context>
