@@ -57,7 +57,8 @@ Page {
             id: listItem
             width: parent.width
             contentHeight: Theme.itemSizeLarge
-            //property int unreadCount: index % 3 === 0 ? 5 : 0 // Пример для теста
+            property int unreadCount: 0//index % 3 === 0 ? 5 : 0 // Пример для теста
+
             Rectangle {
                 id: avatarContainer
                 width: Theme.itemSizeMedium - Theme.paddingMedium
