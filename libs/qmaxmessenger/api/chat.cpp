@@ -79,6 +79,7 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
     m_chatId = jsonObject["id"].toDouble();
     m_chatCid = jsonObject["cid"].toDouble();
     m_pinnedMessage = new ChatMessage(jsonObject["pinnedMessage"].toObject());
+    m_newMessagesCount = jsonObject["newMessages"].toDouble();
 }
 
 
@@ -101,6 +102,7 @@ Chat::Chat(const Chat &other, QObject *parent)
     m_chatId = other.chatId();
     m_chatCid = other.chatCid();
     m_pinnedMessage = other.pinnedMessage();
+    m_newMessagesCount = other.newMessagesCount();
 }
 
 Chat &Chat::operator=(const Chat &other)
@@ -121,6 +123,7 @@ Chat &Chat::operator=(const Chat &other)
     m_chatId = other.chatId();
     m_chatCid = other.chatCid();
     m_pinnedMessage = other.pinnedMessage();
+    m_newMessagesCount = other.newMessagesCount();
 
     return *this;
 }
@@ -223,4 +226,9 @@ Chat::Access Chat::access() const
 int Chat::participantsCount() const
 {
     return m_participantsCount;
+}
+
+qint64 Chat::newMessagesCount() const
+{
+    return newMessagesCount;
 }
