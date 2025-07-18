@@ -168,7 +168,7 @@ Page {
                 text: qsTr("For suggestions, bugs and ideas visit ")
             }
             Button {
-                text: "GitFlic"
+                text: "GitHub"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: Qt.openUrlExternally(
                                "https://github.com/neochapay/ru.neochapay.maximus")
