@@ -30,7 +30,7 @@ ChatsListModel::ChatsListModel(QObject *parent)
             loadChatsList(message.payload());
         } else if(message.opcode() == 130) {
             handleNewMessageChanges(message.payload());
-        } else if(message.opcode() == 128) {
+        } else if(message.opcode() == 128 || message.opcode() == 64) {
             addNewMessageToChat(message.payload());
             sortChats();
         }
