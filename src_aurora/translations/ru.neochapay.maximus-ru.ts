@@ -57,62 +57,25 @@
     </message>
 </context>
 <context>
+    <name>ChatListItem</name>
+    <message>
+        <source>No messages</source>
+        <translation>Нет сообщений</translation>
+    </message>
+</context>
+<context>
     <name>ChatListPage</name>
     <message>
         <source>Chats</source>
         <translation>Чаты</translation>
     </message>
     <message>
-        <source>Logout</source>
-        <translation>Выйти</translation>
-    </message>
-    <message>
-        <source>No messages</source>
-        <translation>Нет сообщений</translation>
-    </message>
-    <message>
-        <source>Can send messages</source>
-        <translation>Могу отправить сообщения</translation>
-    </message>
-    <message>
-        <source>Can&apos;t send messages</source>
-        <translation>Не могу отправить сообщения</translation>
-    </message>
-    <message>
-        <source>yesterday</source>
-        <translation>вчера</translation>
-    </message>
-    <message>
-        <source>Sun</source>
-        <translation>Вс</translation>
-    </message>
-    <message>
-        <source>Mon</source>
-        <translation>Пн</translation>
-    </message>
-    <message>
-        <source>Tue</source>
-        <translation>Вт</translation>
-    </message>
-    <message>
-        <source>Wed</source>
-        <translation>Ср</translation>
-    </message>
-    <message>
-        <source>Thu</source>
-        <translation>Чт</translation>
-    </message>
-    <message>
-        <source>Fri</source>
-        <translation>Пт</translation>
-    </message>
-    <message>
-        <source>Sat</source>
-        <translation>Сб</translation>
-    </message>
-    <message>
         <source>About</source>
         <translation>О программе</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Выйти</translation>
     </message>
 </context>
 <context>
@@ -167,7 +130,7 @@
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">О программе</translation>
+        <translation>О программе</translation>
     </message>
 </context>
 <context>
@@ -175,6 +138,41 @@
     <message>
         <source>Unsupported message</source>
         <translation>Неподдерживаемое сообщение</translation>
+    </message>
+</context>
+<context>
+    <name>Utils</name>
+    <message>
+        <source>yesterday</source>
+        <translation>вчера</translation>
+    </message>
+    <message>
+        <source>Sun</source>
+        <translation>Вс</translation>
+    </message>
+    <message>
+        <source>Mon</source>
+        <translation>Пн</translation>
+    </message>
+    <message>
+        <source>Tue</source>
+        <translation>Вт</translation>
+    </message>
+    <message>
+        <source>Wed</source>
+        <translation>Ср</translation>
+    </message>
+    <message>
+        <source>Thu</source>
+        <translation>Чт</translation>
+    </message>
+    <message>
+        <source>Fri</source>
+        <translation>Пт</translation>
+    </message>
+    <message>
+        <source>Sat</source>
+        <translation>Сб</translation>
     </message>
 </context>
 </TS>

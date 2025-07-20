@@ -24,7 +24,7 @@ import QtGraphicalEffects 1.0
 
 import ru.neochapay.maximus 1.0
 
-import "../jsFunctions/emoji.js" as EmojiFunc
+import "../js/emoji.js" as EmojiFunc
 
 
 Item {

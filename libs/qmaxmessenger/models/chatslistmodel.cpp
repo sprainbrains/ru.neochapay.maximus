@@ -38,6 +38,7 @@ ChatsListModel::ChatsListModel(QObject *parent)
     m_hash.insert(Qt::UserRole + 4, QByteArray("chatIcon"));
     m_hash.insert(Qt::UserRole + 5, QByteArray("lastEventTime"));
     m_hash.insert(Qt::UserRole + 6, QByteArray("canSendMessage"));
+    m_hash.insert(Qt::UserRole + 7, QByteArray("unreadCount"));
 }
 
 int ChatsListModel::rowCount(const QModelIndex &parent) const
@@ -98,6 +99,8 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
         return item->lastEventTime();
     } else if (role == Qt::UserRole + 6) {
         return item->type() != Chat::CHANNEL;
+    } else if (role == Qt::UserRole + 7) {
+        return item->newMessagesCount();
     }
 
     return QVariant();

@@ -37,6 +37,7 @@ class Chat : public QObject
     Q_PROPERTY(qint64 lastFireDelayedErrorTime READ lastFireDelayedErrorTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastDelayedUpdateTime READ lastDelayedUpdateTime NOTIFY chatChanged FINAL)
     Q_PROPERTY(int prevMessageId READ prevMessageId NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 newMessagesCount READ newMessagesCount NOTIFY chatChanged)
     Q_PROPERTY(Access access READ access NOTIFY chatChanged FINAL)
 //TODO options
     Q_PROPERTY(QDateTime modified READ modified NOTIFY chatChanged FINAL)
@@ -102,6 +103,7 @@ public:
     qint64 chatCid() const;
     Access access() const;
     int participantsCount() const;
+    qint64 newMessagesCount() const;
 
 signals:
     void chatChanged();
@@ -127,6 +129,7 @@ private:
     qint64 m_chatCid;
     Access m_access;
     int m_participantsCount;
+    qint64 m_newMessagesCount;
 };
 
 #endif // CHAT_H
