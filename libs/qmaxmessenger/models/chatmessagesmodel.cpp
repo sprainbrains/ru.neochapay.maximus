@@ -186,6 +186,7 @@ void ChatMessagesModel::pushNewMessageToList(QJsonObject message)
     }
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     m_messages.push_back(m);
+    m_chat->addMessage(message);
     endInsertRows();
 }
 
