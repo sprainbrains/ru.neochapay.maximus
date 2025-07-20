@@ -230,5 +230,5 @@ int Chat::participantsCount() const
 
 qint64 Chat::newMessagesCount() const
 {
-    return newMessagesCount;
+    return m_newMessagesCount;
 }
