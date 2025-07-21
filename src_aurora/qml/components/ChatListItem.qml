@@ -20,7 +20,9 @@
 
  import QtQuick 2.0
  import Sailfish.Silica 1.0
+ import QtGraphicalEffects 1.0
  import "../js/Utils.js" as Utils
+ import "../js/emoji.js" as EmojiFunc
 
  ListItem {
      id: listItem
@@ -96,7 +98,7 @@
                  width: parent.width
                         - (unreadBadge.visible ? unreadBadge.width + Theme.paddingSmall : 0)
                         - (statusIcon.visible ? statusIcon.width + Theme.paddingSmall : 0)
-                 text: chatDescription || qsTr("No messages")
+                 text: EmojiFunc.convertToOriginalHtml(chatDescription) || qsTr("No messages")
                  color: unreadCount > 0 ? Theme.primaryColor : Theme.secondaryColor
                  font.pixelSize: Theme.fontSizeSmall
                  truncationMode: TruncationMode.Fade

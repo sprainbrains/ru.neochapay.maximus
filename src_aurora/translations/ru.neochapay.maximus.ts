@@ -72,7 +72,7 @@
 <context>
     <name>ChatListItem</name>
     <message>
-        <location filename="../qml/components/ChatListItem.qml" line="99"/>
+        <location filename="../qml/components/ChatListItem.qml" line="101"/>
         <source>No messages</source>
         <translation type="unfinished"></translation>
     </message>
@@ -80,17 +80,17 @@
 <context>
     <name>ChatListPage</name>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="34"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="33"/>
         <source>Chats</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="39"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="38"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatListPage.qml" line="43"/>
+        <location filename="../qml/pages/ChatListPage.qml" line="42"/>
         <source>Logout</source>
         <translation type="unfinished"></translation>
     </message>
@@ -98,7 +98,7 @@
 <context>
     <name>ChatPage</name>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="35"/>
+        <location filename="../qml/pages/ChatPage.qml" line="38"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>

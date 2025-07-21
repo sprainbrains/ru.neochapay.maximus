@@ -10,7 +10,13 @@ LIBS += -L../libs/qtwebsockets5 -lqtwebsockets \
         -L../libs/qmaxmessenger/ -lqmaxmessenger
 
 SOURCES += \
+    emojimodel.cpp \
     main.cpp
+
+RESOURCES += qml.qrc
+
+HEADERS += \
+    emojimodel.h
 
 DISTFILES += \
     qml/* \
