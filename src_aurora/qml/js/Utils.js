@@ -53,20 +53,44 @@ function formatTime(dateTimeString) {
         return Qt.formatDate(date, "dd.MM.yy");
     }
 }
-function formatMessageDate(dateTimeString) {
-    if (!dateTimeString) return "";
+// function formatMessageDate(dateTimeString) {
+//     if (!dateTimeString) return "";
 
-    var date = new Date(dateTimeString);
-    if (isNaN(date.getTime())) return "";
+//     var date = new Date(dateTimeString);
+//     if (isNaN(date.getTime())) return "";
+
+//     var now = new Date();
+//     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+//     if (date >= today) {
+//         return Qt.formatTime(date, "hh:mm");
+//     } else {
+//         return Qt.formatDate(date, "dd.MM.yy,  hh:mm");
+//     }
+// }
+
+function formatMessageDate(dateTimeString) {
+    var messageDate = new Date(dateTimeString);
+
+    if (isNaN(messageDate.getTime())) return "";
 
     var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    if (date >= today) {
-        return Qt.formatTime(date, "hh:mm");
-    } else {
-        return Qt.formatDate(date, "dd.MM.yy,  hh:mm");
+    if (messageDate.toDateString() === now.toDateString()) {
+        return Qt.formatTime(messageDate, "hh:mm");
     }
+
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+        return qsTr("Yesterday") + ", " + Qt.formatTime(messageDate, "hh:mm");
+    }
+
+    if (messageDate.getFullYear() === now.getFullYear()) {
+        return Qt.formatDate(messageDate, "dd MMM") + ", " + Qt.formatTime(messageDate, "hh:mm");
+    }
+
+    return Qt.formatDate(messageDate, "dd MMM yyyy") + ", " + Qt.formatTime(messageDate, "hh:mm");
 }
 
 function formatLinks(text) {

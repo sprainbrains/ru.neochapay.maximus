@@ -215,5 +215,10 @@
         <source>Sat</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="86"/>
+        <source>Yesterday</source>
+        <translation type="unfinished">Вчера</translation>
+    </message>
 </context>
 </TS>

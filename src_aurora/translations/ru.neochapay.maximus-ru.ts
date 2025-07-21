@@ -178,5 +178,9 @@
         <source>Sat</source>
         <translation>Сб</translation>
     </message>
+    <message>
+        <source>Yesterday</source>
+        <translation>Вчера</translation>
+    </message>
 </context>
 </TS>

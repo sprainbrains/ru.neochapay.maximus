@@ -29,7 +29,7 @@ import "../js/Utils.js" as Utils
 Item {
     id: listItem
     height: (isMyMessage ? messageBackground.height + Theme.paddingLarge
-                          * 2 : chatMessageAuthor.height
+                          * 5 : chatMessageAuthor.height
                           + messageBackground.height + Theme.paddingLarge * 4)
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
