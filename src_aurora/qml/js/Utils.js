@@ -53,6 +53,21 @@ function formatTime(dateTimeString) {
         return Qt.formatDate(date, "dd.MM.yy");
     }
 }
+function formatMessageDate(dateTimeString) {
+    if (!dateTimeString) return "";
+
+    var date = new Date(dateTimeString);
+    if (isNaN(date.getTime())) return "";
+
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    if (date >= today) {
+        return Qt.formatTime(date, "hh:mm");
+    } else {
+        return Qt.formatDate(date, "dd.MM.yy,  hh:mm");
+    }
+}
 
 function formatLinks(text) {
     if (!text)

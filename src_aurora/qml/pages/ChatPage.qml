@@ -115,6 +115,13 @@ Page {
         model: chatMessagesModel
         clip: true
 
+        footer: Item {
+            width: parent.width
+            height: Theme.paddingMedium
+            visible: (chatMessagesModel.messageSenderId === userSession.userId) &&
+                     (messagesListView.currentIndex === count - 1)
+        }
+
         MouseArea {
             anchors.fill: parent
             z: -1  // Put behind delegates

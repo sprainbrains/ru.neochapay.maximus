@@ -28,9 +28,10 @@ import "../js/Utils.js" as Utils
 
 Item {
     id: listItem
-    height: isMyMessage ? messageBackground.height + Theme.paddingLarge
+    height: (isMyMessage ? messageBackground.height + Theme.paddingLarge
                           * 2 : chatMessageAuthor.height
-                          + messageBackground.height + Theme.paddingLarge * 4
+                          + messageBackground.height + Theme.paddingLarge * 4)
+                          + timeLabel.height + Theme.paddingSmall
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
     property var message
@@ -88,11 +89,12 @@ Item {
                == ChatMessage.PhotoMessage ? postImage.width + Theme.paddingLarge
                                              * 2 : chatMessageText.width + Theme.paddingLarge * 2
 
-        height: messageType
+        height: (messageType
                 == ChatMessage.PhotoMessage ? chatMessageText.height + reactionsCounter.height
                                               + postImage.height + Theme.paddingLarge
                                               * 3 : chatMessageText.height
-                                              + reactionsCounter.height + Theme.paddingLarge * 3
+                                              + reactionsCounter.height + Theme.paddingLarge * 3)
+                + timeLabel.height + Theme.paddingSmall
 
         radius: Theme.paddingLarge / 2
 
@@ -139,15 +141,27 @@ Item {
             linkColor: Theme.rgba(Theme.secondaryHighlightColor, 0.7)
         }
 
+        Label {
+            id: timeLabel
+            text: Utils.formatMessageDate(messageTime)
+            font.pixelSize: Theme.fontSizeExtraSmall
+            color: isMyMessage ? Theme.secondaryColor : Theme.secondaryColor
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: Theme.paddingSmall
+                right: parent.right
+                rightMargin: Theme.paddingMedium
+            }
+        }
+
         Item {
             id: reactionsCounter
             visible: reactionsCount > 0
-
             anchors {
                 top: chatMessageText.bottom
                 topMargin: Theme.paddingLarge
-                right: parent.right
-                rightMargin: Theme.paddingLarge
+                right: timeLabel.left
+                rightMargin: Theme.paddingSmall
             }
         }
     }
