@@ -232,3 +232,15 @@ qint64 Chat::newMessagesCount() const
 {
     return m_newMessagesCount;
 }
+
+void Chat::setNewMessagesCount(qint64 count)
+{
+    m_newMessagesCount = count;
+}
+
+void Chat::addMessage(QJsonObject message)
+{
+    m_messages.push_back(new ChatMessage(message));
+    m_lastEventTime = message["time"].toDouble();
+    emit chatChanged();
+}

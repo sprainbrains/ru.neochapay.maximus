@@ -28,7 +28,13 @@ ChatsListModel::ChatsListModel(QObject *parent)
     connect(m_messQueue, &MessagesQueue::messageReceived, [=](RawApiMessage message) {
         if(message.opcode() == 19) {
             loadChatsList(message.payload());
+        } else if(message.opcode() == 130) {
+            handleNewMessageChanges(message.payload());
+        } else if(message.opcode() == 128 || message.opcode() == 64) {
+            addNewMessageToChat(message.payload());
+            sortChats();
         }
+
     });
 
     m_hash.insert(Qt::UserRole, QByteArray("chatId"));
@@ -127,5 +133,38 @@ void ChatsListModel::loadChatsList(QJsonObject payload)
         m_chats.push_back(chat);
     }
 
+    endResetModel();
+}
+
+void ChatsListModel::handleNewMessageChanges(QJsonObject payload)
+{
+    qint64 newUnreadCount = payload["unread"].toDouble();
+    qint64 chatId = payload["chatId"].toDouble();
+
+    for(int i = 0; i < m_chats.count(); ++i) {
+        Chat* chat = m_chats.at(i);
+        if(chat->chatId() == chatId) {
+            chat->setNewMessagesCount(newUnreadCount);
+            emit dataChanged(index(i, 0), index(i, 0));
+            break;
+        }
+    }
+}
+
+void ChatsListModel::addNewMessageToChat(QJsonObject payload)
+{
+    for(int i = 0; i < m_chats.count(); ++i) {
+        if(payload["chatId"].toDouble() == m_chats.at(i)->chatId()) {
+            m_chats.at(i)->addMessage(payload["message"].toObject());
+        }
+    }
+}
+
+void ChatsListModel::sortChats()
+{
+    beginResetModel();
+    std::sort(m_chats.begin(), m_chats.end(), [](Chat* a, Chat* b) {
+        return a->messages().last()->messageTime() > b->messages().last()->messageTime();
+    });
     endResetModel();
 }

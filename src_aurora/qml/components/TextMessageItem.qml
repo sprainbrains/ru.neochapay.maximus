@@ -137,7 +137,7 @@ Item {
             onLinkActivated: Qt.openUrlExternally(link)
 
             textFormat: Text.RichText
-            linkColor: Theme.rgba(Theme.secondaryHighlightFromColor(), 0.7)
+            linkColor: Theme.rgba(Theme.secondaryHighlightColor, 0.7)
 
             function formatLinks(text) {
                 if (!text)

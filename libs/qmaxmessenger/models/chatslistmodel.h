@@ -37,6 +37,9 @@ public:
 
 private:
     void loadChatsList(QJsonObject payload);
+    void handleNewMessageChanges(QJsonObject payload);
+    void addNewMessageToChat(QJsonObject payload);
+    void sortChats();
     MessagesQueue* m_messQueue;
 
     QHash<int, QByteArray> m_hash;
