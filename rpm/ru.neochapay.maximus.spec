@@ -4,7 +4,7 @@
 Name:       ru.neochapay.maximus
 Summary:    Клиент мессенджера макс
 Version:    0.0.9
-Release:    1
+Release:    4
 License:    BSD-3-Clause
 URL:        https://neochapay.ru
 Source0:    %{name}-%{version}.tar.bz2

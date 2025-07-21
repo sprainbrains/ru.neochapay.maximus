@@ -31,7 +31,6 @@ Item {
     height: (isMyMessage ? messageBackground.height + Theme.paddingLarge
                           * 2 : chatMessageAuthor.height
                           + messageBackground.height + Theme.paddingLarge * 4)
-                          + timeLabel.height + Theme.paddingSmall
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
     property var message
