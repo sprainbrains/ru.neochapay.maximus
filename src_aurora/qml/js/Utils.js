@@ -53,3 +53,28 @@ function formatTime(dateTimeString) {
         return Qt.formatDate(date, "dd.MM.yy");
     }
 }
+
+function formatLinks(text) {
+    if (!text)
+        return ""
+
+    text = text.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,
+                        function (url) {
+                            var href = url.indexOf(
+                                        'http') === 0 ? url : 'http://' + url
+                            return '<a href="' + href + '">' + url + '</a>'
+                        })
+
+    // Форматирование email-адресов
+    text = text.replace(
+                /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
+                '<a href="mailto:$1">$1</a>')
+    // Форматирование телефонных номеров (международный формат)
+    text = text.replace(/(\+?[\d\s\-\(\)]{7,}\d)/g,
+                        function (phone) {
+                            var cleanPhone = phone.replace(
+                                        /[^\d\+]/g, '')
+                            return '<a href="tel:' + cleanPhone + '">' + phone + '</a>'
+                        })
+    return text
+}

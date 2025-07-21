@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2025 Chupligin Sergey <neochapay@gmail.com>
  *
@@ -25,6 +23,7 @@ import QtGraphicalEffects 1.0
 import ru.neochapay.maximus 1.0
 
 import "../js/emoji.js" as EmojiFunc
+import "../js/Utils.js" as Utils
 
 
 Item {
@@ -123,7 +122,7 @@ Item {
         Label {
             id: chatMessageText
             z:20
-            text: EmojiFunc.convertToOriginalHtml(formatLinks(messageText))
+            text: EmojiFunc.convertToOriginalHtml(Utils.formatLinks(messageText))
             visible: text.length > 0
             width: listItem.width * 0.6
             font.pixelSize: Theme.fontSizeMedium
@@ -138,31 +137,6 @@ Item {
 
             textFormat: Text.RichText
             linkColor: Theme.rgba(Theme.secondaryHighlightColor, 0.7)
-
-            function formatLinks(text) {
-                if (!text)
-                    return ""
-
-                text = text.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,
-                                    function (url) {
-                                        var href = url.indexOf(
-                                                    'http') === 0 ? url : 'http://' + url
-                                        return '<a href="' + href + '">' + url + '</a>'
-                                    })
-
-                // Форматирование email-адресов
-                text = text.replace(
-                            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
-                            '<a href="mailto:$1">$1</a>')
-                // Форматирование телефонных номеров (международный формат)
-                text = text.replace(/(\+?[\d\s\-\(\)]{7,}\d)/g,
-                                    function (phone) {
-                                        var cleanPhone = phone.replace(
-                                                    /[^\d\+]/g, '')
-                                        return '<a href="tel:' + cleanPhone + '">' + phone + '</a>'
-                                    })
-                return text
-            }
         }
 
         Item {

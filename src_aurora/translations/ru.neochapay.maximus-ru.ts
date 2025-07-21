@@ -84,6 +84,10 @@
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
+    <message>
+        <source>Type a message...</source>
+        <translation>Сообщение...</translation>
+    </message>
 </context>
 <context>
     <name>ControlMessageItem</name>

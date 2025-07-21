@@ -98,8 +98,13 @@
 <context>
     <name>ChatPage</name>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="38"/>
+        <location filename="../qml/pages/ChatPage.qml" line="37"/>
         <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatPage.qml" line="177"/>
+        <source>Type a message...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
