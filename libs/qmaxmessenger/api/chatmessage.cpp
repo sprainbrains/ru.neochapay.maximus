@@ -69,7 +69,7 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     }
 
 //Reactions
-    if(!chatMessageObject.contains("reactionInfo")) {
+    if(chatMessageObject.contains("reactionInfo")) {
         m_reactionsCount = chatMessageObject["reactionInfo"].toObject()["totalCount"].toInt();
         QJsonArray reactions = chatMessageObject["reactionInfo"].toObject()["counters"].toArray();
         foreach(QJsonValue reaction, reactions) {
