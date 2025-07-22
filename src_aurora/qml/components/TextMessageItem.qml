@@ -28,12 +28,16 @@ import "../js/Utils.js" as Utils
 
 Item {
     id: listItem
-    height: (isMyMessage ? messageBackground.height + Theme.paddingLarge
-                          * 5 : chatMessageAuthor.height
-                          + messageBackground.height + Theme.paddingLarge * 4)
+    height: (isMyMessage ?  Theme.paddingLarge : chatMessageAuthor.height)
+                          + messageBackground.height
+                          + Theme.paddingLarge * 4
+
     width: messagesListView.width
     property bool isMyMessage: messageSenderId == userSession.userId
     property var message
+
+    property bool hasReply: replyToMessageId !== 0
+    property bool isPhotoMessage: messageType === ChatMessage.PhotoMessage
 
     Image {
         id: chatMessageImage
@@ -84,16 +88,14 @@ Item {
         color: isMyMessage ? Theme.rgba(Theme.highlightBackgroundColor,
                                         0.3) : Theme.rgba(
                                  Theme.secondaryHighlightColor, 0.2)
-        width: messageType
-               == ChatMessage.PhotoMessage ? postImage.width + Theme.paddingLarge
-                                             * 2 : chatMessageText.width + Theme.paddingLarge * 2
+        width: (isPhotoMessage ? postImage.width  : chatMessageText.width)
 
-        height: (messageType
-                == ChatMessage.PhotoMessage ? chatMessageText.height + reactionsCounter.height
-                                              + postImage.height + Theme.paddingLarge
-                                              * 3 : chatMessageText.height
-                                              + reactionsCounter.height + Theme.paddingLarge * 3)
-                + timeLabel.height + Theme.paddingSmall
+        height: (isPhotoMessage ? postImage.height + Theme.paddingLarge * 3 : 0)
+                        + chatMessageText.height
+                        + (hasReply ? replyContainer.height : 0)
+                        + (reactionsCounter.visible? reactionsCounter.height : 0)
+                        + timeLabel.height
+                        + Theme.paddingLarge
 
         radius: Theme.paddingLarge / 2
 
@@ -105,17 +107,97 @@ Item {
             top: chatMessageAuthor.bottom
             topMargin: Theme.paddingLarge
         }
+        Rectangle {
+            id: replyContainer
+            visible: hasReply
+            width: parent.width - 2 * Theme.paddingLarge
+            height: visible ? (replySenderNameLabel.height
+                                + (postReplyImage.visible ? postReplyImage.height + Theme.paddingSmall : 0)
+                                + (replyMessageTextLabel.visible ? replyMessageTextLabel.height : 0)) : 0
+            color: "transparent"
+            anchors {
+                top: parent.top
+                topMargin: Theme.paddingMedium
+                left: parent.left
+                leftMargin: Theme.paddingLarge
+                right: parent.right
+                rightMargin: Theme.paddingLarge
+            }
 
+            Rectangle {
+                id: replyIndicator
+                width: 3
+                height: parent.height
+                color: Theme.highlightColor
+                anchors {
+                    left: parent.left
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+            }
+
+            Column {
+                id: replyContentColumn
+                x: replyIndicator.width + Theme.paddingMedium
+                width: parent.width - x
+                spacing: Theme.paddingSmall / 2
+
+                // reply name
+                Label {
+                    id: replySenderNameLabel
+                    text: replySenderName
+                    font.bold: true
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.primaryColor
+                    truncationMode: TruncationMode.Fade
+                    width: parent.width
+                }
+
+                // reply image
+                Image {
+                    id: postReplyImage
+                    source: replyMessageType == ChatMessage.PhotoMessage ? replyMessageExtendedData : ""
+                    width: parent.width
+                    height: 100
+                    fillMode: Image.PreserveAspectFit
+                    visible: replyMessageType == ChatMessage.PhotoMessage && replyMessageExtendedData
+                    horizontalAlignment: Image.AlignLeft
+                    verticalAlignment: Image.AlignTop
+
+               	    layer.enabled: true
+               	    layer.effect: OpacityMask {
+                  		maskSource: Rectangle {
+                  		    width: postReplyImage.width
+                  		    height: postReplyImage.height
+                  		    radius: 4
+                  		}
+               	    }
+                }
+
+                // reply text
+                Label {
+                    id: replyMessageTextLabel
+                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatLinks(messageText)))
+                    visible: text.length > 0
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.secondaryColor
+                    maximumLineCount: 2
+                    elide: Text.ElideRight
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+            }
+        }
         Image {
             id: postImage
             source: messageType == ChatMessage.PhotoMessage ? messageExtendedData : ""
             width: listItem.width * 0.6
             fillMode: Image.PreserveAspectFit
-            visible: messageType == ChatMessage.PhotoMessage
+            visible: isPhotoMessage
             anchors {
                 left: parent.left
                 leftMargin: Theme.paddingLarge
-                top: parent.top
+                top: replyContainer.visible ? replyContainer.bottom : parent.top
                 topMargin: Theme.paddingLarge
             }
         }
@@ -131,7 +213,7 @@ Item {
             anchors {
                 left: parent.left
                 leftMargin: Theme.paddingLarge
-                top: messageType == ChatMessage.PhotoMessage ? postImage.bottom : parent.top
+                top: isPhotoMessage ? postImage.bottom : (replyContainer.visible ? replyContainer.bottom : parent.top)
                 topMargin: Theme.paddingLarge
             }
             onLinkActivated: Qt.openUrlExternally(link)

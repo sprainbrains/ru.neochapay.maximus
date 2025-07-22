@@ -20,6 +20,7 @@
 #define CHATMESSAGE_H
 
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QObject>
 #include <QDateTime>
 #include <QVariant>
@@ -42,6 +43,7 @@ class ChatMessage : public QObject
     // attaches
     Q_PROPERTY(int reactionsCount READ reactionsCount NOTIFY chatMessageChanged)
     Q_PROPERTY(QList<ChatMessageReactions*> reactions READ reactions NOTIFY chatMessageChanged)
+    Q_PROPERTY(ChatMessage* messageReply READ messageReply NOTIFY chatMessageChanged FINAL)
 
 public:
     struct ChatMessageElement
@@ -79,6 +81,7 @@ public:
     const QList<ChatMessageReactions *> &reactions() const;
 
     int reactionsCount() const;
+    ChatMessage* messageReply() const;
 
 signals:
     void chatMessageChanged();
@@ -93,6 +96,7 @@ private:
     QVariant m_extendedData;
     QList<ChatMessageReactions*> m_reactions;
     int m_reactionsCount;
+    ChatMessage* m_messageReply;
 };
 Q_DECLARE_METATYPE(ChatMessage);
 #endif // CHATMESSAGE_H

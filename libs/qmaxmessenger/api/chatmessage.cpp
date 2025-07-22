@@ -22,17 +22,25 @@
 
 ChatMessage::ChatMessage(QObject *parent)
     : QObject{parent}
+    , m_messageReply(Q_NULLPTR)
 {
 }
 
 ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     : QObject{parent}
     , m_messageType(UnknowMessageType)
+    , m_messageReply(Q_NULLPTR)
 {
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();
     m_text = chatMessageObject["text"].toString();
     m_messageTime = QDateTime::fromMSecsSinceEpoch(chatMessageObject["time"].toDouble());
+
+    if(chatMessageObject.contains("link")) {
+        QJsonObject chatReply = chatMessageObject["link"].toObject()["message"].toObject();
+        m_messageReply = new ChatMessage(chatReply);
+    }
+
 
     QJsonArray elements = chatMessageObject["elements"].toArray();
     foreach (QJsonValue element, elements) {
@@ -61,13 +69,15 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     }
 
 //Reactions
-    m_reactionsCount = chatMessageObject["reactionInfo"].toObject()["totalCount"].toInt();
-    QJsonArray reactions = chatMessageObject["reactionInfo"].toObject()["counters"].toArray();
-    foreach(QJsonValue reaction, reactions) {
-        int reactionsCount = reaction.toObject()["count"].toInt();
-        QString reactionsString = reaction.toObject()["reaction"].toString();
-        ChatMessageReactions* r = new ChatMessageReactions(reactionsCount, reactionsString);
-        m_reactions.push_back(r);
+    if(!chatMessageObject.contains("reactionInfo")) {
+        m_reactionsCount = chatMessageObject["reactionInfo"].toObject()["totalCount"].toInt();
+        QJsonArray reactions = chatMessageObject["reactionInfo"].toObject()["counters"].toArray();
+        foreach(QJsonValue reaction, reactions) {
+            int reactionsCount = reaction.toObject()["count"].toInt();
+            QString reactionsString = reaction.toObject()["reaction"].toString();
+            ChatMessageReactions* r = new ChatMessageReactions(reactionsCount, reactionsString);
+            m_reactions.push_back(r);
+        }
     }
 }
 
@@ -81,6 +91,7 @@ ChatMessage::ChatMessage(const ChatMessage &other, QObject *parent)
     m_messageTime = other.messageTime();
     m_elements = other.elements();
     m_messageType = other.messageType();
+    m_messageReply = other.messageReply();
 }
 
 ChatMessage &ChatMessage::operator=(const ChatMessage &other)
@@ -91,6 +102,7 @@ ChatMessage &ChatMessage::operator=(const ChatMessage &other)
     m_messageTime = other.messageTime();
     m_elements = other.elements();
     m_messageType = other.messageType();
+    m_messageReply = other.messageReply();
     return *this;
 }
 
@@ -137,4 +149,9 @@ const QList<ChatMessageReactions *> &ChatMessage::reactions() const
 int ChatMessage::reactionsCount() const
 {
     return m_reactionsCount;
+}
+
+ChatMessage* ChatMessage::messageReply() const
+{
+    return m_messageReply;
 }

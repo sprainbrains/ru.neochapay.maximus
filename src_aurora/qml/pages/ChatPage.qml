@@ -118,6 +118,7 @@ Page {
         footer: Item {
             width: parent.width
             height: Theme.paddingMedium
+            // visible: (chatMessagesModel.messageSenderId === userSession.userId) &&
             visible: (chatMessagesModel.messageSenderId === userSession.userId) &&
                      (messagesListView.currentIndex === count - 1)
         }

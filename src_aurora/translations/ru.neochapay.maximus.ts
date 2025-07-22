@@ -103,7 +103,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="184"/>
+        <location filename="../qml/pages/ChatPage.qml" line="185"/>
         <source>Type a message...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,9 +216,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/js/Utils.js" line="86"/>
+        <location filename="../qml/js/Utils.js" line="71"/>
         <source>Yesterday</source>
-        <translation type="unfinished">Вчера</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
