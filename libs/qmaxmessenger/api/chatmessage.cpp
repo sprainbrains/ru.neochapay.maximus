@@ -23,6 +23,7 @@
 ChatMessage::ChatMessage(QObject *parent)
     : QObject{parent}
     , m_messageReply(Q_NULLPTR)
+    , m_reactionsCount(0)
 {
 }
 
@@ -30,6 +31,7 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     : QObject{parent}
     , m_messageType(UnknowMessageType)
     , m_messageReply(Q_NULLPTR)
+    , m_reactionsCount(0)
 {
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();
@@ -92,6 +94,8 @@ ChatMessage::ChatMessage(const ChatMessage &other, QObject *parent)
     m_elements = other.elements();
     m_messageType = other.messageType();
     m_messageReply = other.messageReply();
+    m_reactions = other.reactions();
+    m_reactionsCount = other.reactionsCount();
 }
 
 ChatMessage &ChatMessage::operator=(const ChatMessage &other)
@@ -103,6 +107,8 @@ ChatMessage &ChatMessage::operator=(const ChatMessage &other)
     m_elements = other.elements();
     m_messageType = other.messageType();
     m_messageReply = other.messageReply();
+    m_reactions = other.reactions();
+    m_reactionsCount = other.reactionsCount();
     return *this;
 }
 

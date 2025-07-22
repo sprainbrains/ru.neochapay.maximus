@@ -89,13 +89,14 @@ Item {
                                         0.3) : Theme.rgba(
                                  Theme.secondaryHighlightColor, 0.2)
         width: (isPhotoMessage ? postImage.width  : chatMessageText.width)
+                        + Theme.paddingLarge * 2
 
         height: (isPhotoMessage ? postImage.height + Theme.paddingLarge * 3 : 0)
                         + chatMessageText.height
                         + (hasReply ? replyContainer.height : 0)
                         + (reactionsCounter.visible? reactionsCounter.height : 0)
                         + timeLabel.height
-                        + Theme.paddingLarge
+                        + Theme.paddingLarge * 2
 
         radius: Theme.paddingLarge / 2
 
@@ -237,7 +238,36 @@ Item {
 
         Item {
             id: reactionsCounter
-            visible: reactionsCount > 0
+            visible: reactionsCount > 0 && reactions.length > 0
+            height: reactionRow.height
+            width: reactionRow.width
+
+            Row {
+                id: reactionRow
+                spacing: Theme.paddingSmall / 2
+                layoutDirection: Qt.LeftToRight
+
+                Repeater {
+                    model: reactions
+
+                    delegate: Rectangle {
+                        id: reactionDelegate
+                        height: reactionLabel.height + Theme.paddingSmall
+                        width: reactionLabel.width + Theme.paddingMedium
+                        radius: height / 2
+                        color: Theme.rgba(Theme.secondaryColor, 0.1)
+
+                        Label {
+                            id: reactionLabel
+                            text: EmojiFunc.convertToOriginalHtml(modelData.reaction) + " " + modelData.count
+                            font.pixelSize: Theme.fontSizeExtraSmall
+                            anchors.centerIn: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
+                }
+            }
             anchors {
                 top: chatMessageText.bottom
                 topMargin: Theme.paddingLarge

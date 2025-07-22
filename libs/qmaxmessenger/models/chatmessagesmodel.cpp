@@ -100,7 +100,12 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 6) {
         return item->reactionsCount();
     } else if (role == Qt::UserRole + 7) {
-        return QVariant::fromValue(item->reactions());
+        QVariantList list;
+        for (ChatMessageReactions* reaction : item->reactions()) {
+            list.append(QVariant::fromValue(reaction));
+        }
+        return list;
+        //return QVariant::fromValue(item->reactions());
     } else if (role == Qt::UserRole + 8) {
         return QVariant::fromValue(item->messageTime());
     } else if (role == Qt::UserRole + 9) {
