@@ -105,7 +105,6 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
             list.append(QVariant::fromValue(reaction));
         }
         return list;
-        //return QVariant::fromValue(item->reactions());
     } else if (role == Qt::UserRole + 8) {
         return QVariant::fromValue(item->messageTime());
     } else if (role == Qt::UserRole + 9) {

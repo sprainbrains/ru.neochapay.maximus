@@ -32,7 +32,7 @@
      property int unreadCount: 0
      property string title: ""
      property string chatDescription: ""
-     property string lastMessageTime: ""
+     property var lastMessageTime: ""
      property string chatIcon: ""
      property bool canSendMessage: true
 
