@@ -178,7 +178,7 @@ Item {
                 // reply text
                 Label {
                     id: replyMessageTextLabel
-                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatText(messageText)))
+                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatText(replyMessageText)))
                     visible: text.length > 0
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.secondaryColor
