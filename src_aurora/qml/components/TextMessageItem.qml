@@ -91,10 +91,10 @@ Item {
         width: (isPhotoMessage ? postImage.width  : chatMessageText.width)
                         + Theme.paddingLarge * 2
 
-        height: (isPhotoMessage ? postImage.height + Theme.paddingLarge * 3 : 0)
+        height: (isPhotoMessage ? postImage.height + Theme.paddingLarge : 0)
                         + chatMessageText.height
                         + (hasReply ? replyContainer.height : 0)
-                        + (reactionsCounter.visible? reactionsCounter.height : 0)
+                        + reactionsColumn.height
                         + timeLabel.height
                         + Theme.paddingLarge * 2
 
@@ -223,6 +223,53 @@ Item {
             linkColor: Theme.rgba(Theme.secondaryHighlightColor, 0.7)
         }
 
+        Column {
+            id: reactionsColumn
+            anchors {
+                top: chatMessageText.bottom
+                topMargin: Theme.paddingMedium
+                left: parent.left
+                leftMargin: Theme.paddingLarge
+                right: parent.right
+                rightMargin: Theme.paddingLarge
+            }
+            spacing: Theme.paddingSmall
+
+            Item {
+                id: reactionsCounter
+                visible: reactionsCount > 0 && reactions.length > 0
+                height: visible ? reactionFlow.height : 0
+                width: parent.width
+
+                Flow {
+                    id: reactionFlow
+                    width: parent.width
+                    spacing: Theme.paddingSmall / 2
+
+                    Repeater {
+                        model: reactions
+
+                        delegate: Rectangle {
+                            id: reactionDelegate
+                            height: reactionLabel.height + Theme.paddingSmall
+                            width: reactionLabel.width + Theme.paddingMedium
+                            radius: height / 2
+                            color: Theme.rgba(Theme.secondaryColor, 0.1)
+
+                            Label {
+                                id: reactionLabel
+                                text: EmojiFunc.convertToOriginalHtml(modelData.reaction) + " " + modelData.count
+                                font.pixelSize: Theme.fontSizeExtraSmall
+                                anchors.centerIn: parent
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Label {
             id: timeLabel
             text: Utils.formatMessageDate(messageTime)
@@ -233,46 +280,6 @@ Item {
                 bottomMargin: Theme.paddingSmall
                 right: parent.right
                 rightMargin: Theme.paddingMedium
-            }
-        }
-
-        Item {
-            id: reactionsCounter
-            visible: reactionsCount > 0 && reactions.length > 0
-            height: reactionRow.height
-            width: reactionRow.width
-
-            Row {
-                id: reactionRow
-                spacing: Theme.paddingSmall / 2
-                layoutDirection: Qt.LeftToRight
-
-                Repeater {
-                    model: reactions
-
-                    delegate: Rectangle {
-                        id: reactionDelegate
-                        height: reactionLabel.height + Theme.paddingSmall
-                        width: reactionLabel.width + Theme.paddingMedium
-                        radius: height / 2
-                        color: Theme.rgba(Theme.secondaryColor, 0.1)
-
-                        Label {
-                            id: reactionLabel
-                            text: EmojiFunc.convertToOriginalHtml(modelData.reaction) + " " + modelData.count
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                    }
-                }
-            }
-            anchors {
-                top: chatMessageText.bottom
-                topMargin: Theme.paddingLarge
-                right: timeLabel.left
-                rightMargin: Theme.paddingSmall
             }
         }
     }
