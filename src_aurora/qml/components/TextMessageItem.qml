@@ -178,7 +178,7 @@ Item {
                 // reply text
                 Label {
                     id: replyMessageTextLabel
-                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatLinks(messageText)))
+                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatText(messageText)))
                     visible: text.length > 0
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.secondaryColor
@@ -206,7 +206,7 @@ Item {
         Label {
             id: chatMessageText
             z:20
-            text: EmojiFunc.convertToOriginalHtml(Utils.formatLinks(messageText))
+            text: EmojiFunc.convertToOriginalHtml(Utils.formatText(messageText))
             visible: text.length > 0
             width: listItem.width * 0.6
             font.pixelSize: Theme.fontSizeMedium
