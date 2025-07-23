@@ -112,7 +112,6 @@ function formatMessagePreview(text) {
 function formatText(text) {
     if (!text) return "";
 
-    // Разбиваем текст на абзацы
     var paragraphs = text.split(/\n\s*\n/);
     var htmlOutput = [];
 
@@ -125,7 +124,7 @@ function formatText(text) {
         var listType = null; // 'ul' или 'ol'
         var listItems = [];
 
-        // Проверяем, является ли блок списком
+
         for (var j = 0; j < lines.length; j++) {
             var line = lines[j].trim();
 
@@ -140,14 +139,12 @@ function formatText(text) {
                 listItems.push(line);
             }
             else {
-                // Если хотя бы одна строка не элемент списка - прерываем
                 if (listItems.length > 0) {
                     break;
                 }
             }
         }
 
-        // Форматируем списки
         if (isList && listItems.length === lines.length) {
             htmlOutput.push('<' + listType + '>');
 
@@ -162,12 +159,10 @@ function formatText(text) {
 
             htmlOutput.push('</' + listType + '>');
         }
-        // Форматируем обычный текст
+
         else {
             var content = lines.join('<br>');
-            // Обрабатываем моноширинные блоки
             content = content.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
-            // Обрабатываем инлайновый код
             content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
             htmlOutput.push('<p>' + formatLinks(content) + '</p>');
         }
