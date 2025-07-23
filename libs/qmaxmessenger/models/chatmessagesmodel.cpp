@@ -36,6 +36,12 @@ ChatMessagesModel::ChatMessagesModel(QObject *parent)
     m_hash.insert(Qt::UserRole+5, QByteArray("messageExtendedData"));
     m_hash.insert(Qt::UserRole+6, QByteArray("reactionsCount"));
     m_hash.insert(Qt::UserRole+7, QByteArray("reactions"));
+    m_hash.insert(Qt::UserRole+8, QByteArray("messageTime"));
+    m_hash.insert(Qt::UserRole+9, QByteArray("replyToMessageId"));
+    m_hash.insert(Qt::UserRole+10, QByteArray("replySenderName"));
+    m_hash.insert(Qt::UserRole+11, QByteArray("replyMessageText"));
+    m_hash.insert(Qt::UserRole+12, QByteArray("replyMessageType"));
+    m_hash.insert(Qt::UserRole+13, QByteArray("replyMessageExtendedData"));
 }
 
 ChatMessagesModel::~ChatMessagesModel()
@@ -94,7 +100,24 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 6) {
         return item->reactionsCount();
     } else if (role == Qt::UserRole + 7) {
-        return QVariant::fromValue(item->reactions());
+        QVariantList list;
+        for (ChatMessageReactions* reaction : item->reactions()) {
+            list.append(QVariant::fromValue(reaction));
+        }
+        return list;
+        //return QVariant::fromValue(item->reactions());
+    } else if (role == Qt::UserRole + 8) {
+        return QVariant::fromValue(item->messageTime());
+    } else if (role == Qt::UserRole + 9) {
+        return item->messageReply() != Q_NULLPTR ? item->messageReply()->messageID() : 0;
+    } else if (role == Qt::UserRole + 10) {
+        return item->messageReply() != Q_NULLPTR ? item->messageReply()->sender()->name() : "";
+    } else if (role == Qt::UserRole + 11) {
+        return item->messageReply() != Q_NULLPTR ? item->messageReply()->text() : "";
+    } else if (role == Qt::UserRole + 12) {
+        return item->messageReply() != Q_NULLPTR ? item->messageReply()->messageType() : 0;
+    } else if (role == Qt::UserRole + 13) {
+        return item->messageReply() != Q_NULLPTR ? item->messageReply()->extendedData() : "";
     }
 
     return QVariant();

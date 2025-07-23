@@ -53,3 +53,120 @@ function formatTime(dateTimeString) {
         return Qt.formatDate(date, "dd.MM.yy");
     }
 }
+
+function formatMessageDate(dateTimeString) {
+    var messageDate = new Date(dateTimeString);
+
+    if (isNaN(messageDate.getTime())) return "";
+
+    var now = new Date();
+
+    if (messageDate.toDateString() === now.toDateString()) {
+        return Qt.formatTime(messageDate, "hh:mm");
+    }
+
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+        return qsTr("Yesterday") + ", " + Qt.formatTime(messageDate, "hh:mm");
+    }
+
+    if (messageDate.getFullYear() === now.getFullYear()) {
+        return Qt.formatDate(messageDate, "dd MMM") + ", " + Qt.formatTime(messageDate, "hh:mm");
+    }
+
+    return Qt.formatDate(messageDate, "dd MMM yyyy") + ", " + Qt.formatTime(messageDate, "hh:mm");
+}
+
+function formatLinks(text) {
+    if (!text)
+        return ""
+
+    text = text.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g,
+                        function (url) {
+                            var href = url.indexOf(
+                                        'http') === 0 ? url : 'http://' + url
+                            return '<a href="' + href + '">' + url + '</a>'
+                        })
+
+    // Форматирование email-адресов
+    text = text.replace(
+                /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g,
+                '<a href="mailto:$1">$1</a>')
+    // Форматирование телефонных номеров (международный формат)
+    text = text.replace(/(\+?[\d\s\-\(\)]{7,}\d)/g,
+                        function (phone) {
+                            var cleanPhone = phone.replace(
+                                        /[^\d\+]/g, '')
+                            return '<a href="tel:' + cleanPhone + '">' + phone + '</a>'
+                        })
+    return text
+}
+
+function formatMessagePreview(text) {
+    var maxLength = 100;
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+}
+
+function formatText(text) {
+    if (!text) return "";
+
+    var paragraphs = text.split(/\n\s*\n/);
+    var htmlOutput = [];
+
+    for (var i = 0; i < paragraphs.length; i++) {
+        var para = paragraphs[i].trim();
+        if (!para) continue;
+
+        var lines = para.split('\n');
+        var isList = false;
+        var listType = null; // 'ul' или 'ol'
+        var listItems = [];
+
+
+        for (var j = 0; j < lines.length; j++) {
+            var line = lines[j].trim();
+
+            if (/^\s*[\-\*•]\s+/.test(line)) {
+                if (listType !== 'ol') listType = 'ul';
+                isList = true;
+                listItems.push(line);
+            }
+            else if (/^\s*\d+\.\s+/.test(line)) {
+                if (listType !== 'ul') listType = 'ol';
+                isList = true;
+                listItems.push(line);
+            }
+            else {
+                if (listItems.length > 0) {
+                    break;
+                }
+            }
+        }
+
+        if (isList && listItems.length === lines.length) {
+            htmlOutput.push('<' + listType + '>');
+
+            for (var j = 0; j < listItems.length; j++) {
+                var item = listItems[j].trim();
+                var itemText = item
+                    .replace(/^\s*[\-\*•]\s+/, '')
+                    .replace(/^\s*\d+\.\s+/, '');
+
+                htmlOutput.push('<li>' + formatLinks(itemText) + '</li>');
+            }
+
+            htmlOutput.push('</' + listType + '>');
+        }
+
+        else {
+            var content = lines.join('<br>');
+            content = content.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+            content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+            htmlOutput.push('<p>' + formatLinks(content) + '</p>');
+        }
+    }
+
+    return htmlOutput.join('');
+}

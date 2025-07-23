@@ -98,8 +98,13 @@
 <context>
     <name>ChatPage</name>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="38"/>
+        <location filename="../qml/pages/ChatPage.qml" line="37"/>
         <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ChatPage.qml" line="185"/>
+        <source>Type a message...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -208,6 +213,11 @@
     <message>
         <location filename="../qml/js/Utils.js" line="50"/>
         <source>Sat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/js/Utils.js" line="71"/>
+        <source>Yesterday</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -25,7 +25,6 @@ import ru.neochapay.maximus 1.0
 import EmojiModel 1.0
 import "../js/emoji.js" as EmojiFunc
 
-
 Page {
     id: chatListPage
     objectName: "chatsListPage"
@@ -40,7 +39,6 @@ Page {
 
     property var currentChat
     property bool showPopup: false
-
 
     // Background dimmer
     Rectangle {
@@ -62,22 +60,25 @@ Page {
         width: parent.width
         height: parent.height / 3
         z: 11
-        radius: chatMessageImage.width / 2
+        radius: Theme.paddingMedium
         anchors{
             bottom: sendMessageRow.top
             left: parent.left
             leftMargin: Theme.paddingSmall
+            right: parent.right
             rightMargin: Theme.paddingSmall
         }
 
-        color: "white"
-        border.color: "gray"
+        color: Theme.rgba(Theme.highlightBackgroundColor, 0.9)
+        border.color: Theme.highlightColor
+        border.width: 1
 
         EmojiPicker {
             id: emojiPicker
             model: emojiModel
             editor: messageTextField
             anchors.fill: parent
+            anchors.margins: Theme.paddingSmall
         }
     }
 
@@ -105,11 +106,22 @@ Page {
 
     SilicaListView {
         id: messagesListView
-        width: parent.width
-        height: parent.height - header.height - sendMessageRow.height
-        anchors.top:  header.bottom
+        anchors {
+            top: header.bottom
+            left: parent.left
+            right: parent.right
+            bottom: sendMessageRow.top
+        }
         model: chatMessagesModel
         clip: true
+
+        footer: Item {
+            width: parent.width
+            height: Theme.paddingMedium
+            // visible: (chatMessagesModel.messageSenderId === userSession.userId) &&
+            visible: (chatMessagesModel.messageSenderId === userSession.userId) &&
+                     (messagesListView.currentIndex === count - 1)
+        }
 
         MouseArea {
             anchors.fill: parent
@@ -136,12 +148,19 @@ Page {
         }
     }
 
-    Item{
+    Rectangle {
         id: sendMessageRow
         width: parent.width
-        height: visible ? Theme.iconSizeLarge : 0
-        anchors.bottom: chatListPage.bottom
-        visible: currentChat.type !== Chat.CHANNEL;
+        height: visible ? Theme.itemSizeLarge : 0
+        anchors.bottom: parent.bottom
+        visible: currentChat.type !== Chat.CHANNEL
+        color: Theme.rgba(Theme.highlightBackgroundColor, 0.1)
+
+        Rectangle {
+            width: parent.width
+            height: 1
+            color: Theme.rgba(Theme.primaryColor, 0.2)
+        }
 
         TextEdit{
             id: messageTextField
@@ -149,14 +168,26 @@ Page {
             width: parent.width - sendButton.width - emojiButton.width - Theme.paddingSmall*4
             height: parent.height - Theme.paddingSmall*2
             verticalAlignment:  TextEdit.AlignVCenter
-            wrapMode: TextEdit.NoWrap
+            wrapMode: TextEdit.Wrap
             textFormat: TextEdit.RichText
-            color: Theme.secondaryColor
+            color: Theme.primaryColor
+            font.pixelSize: Theme.fontSizeMedium
+
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
                 left: emojiButton.right
                 leftMargin: Theme.paddingSmall
+            }
+
+            Text {
+                visible: (!messageTextField.text || messageTextField.text !== "") && !messageTextField.activeFocus
+                text: qsTr("Type a message...")
+                color: Theme.secondaryColor
+                opacity: 0.5
+                font: messageTextField.font
+                anchors.fill: parent
+                verticalAlignment: Text.AlignVCenter
             }
 
             Keys.onReturnPressed: event.accepted = true
@@ -169,58 +200,81 @@ Page {
                     bottom: parent.bottom
                     bottomMargin: Theme.paddingSmall
                 }
-                height: 2  // Underline thickness
-                color: messageTextField.activeFocus ? Theme.highlightColor : Theme.primaryColor  // Blue when focused, gray otherwise
+                height: 2
+                color: messageTextField.activeFocus ? Theme.highlightColor : Theme.primaryColor
 
                 Behavior on color {
-                    ColorAnimation { duration: 200 }  // Smooth color transition
+                    ColorAnimation { duration: 200 }
                 }
             }
         }
 
-
-        IconButton {
+        Rectangle {
             id: emojiButton
-            width: sendButton.width
-            height: sendButton.height
-            icon.fillMode: Image.PreserveAspectFit
-            icon.source: "../icons/emoji-smiley.svg?" + (pressed
-                                                         ? Theme.highlightColor
-                                                         : Theme.primaryColor)
-            icon.width: width * 0.4
-            icon.height: height * 0.4
+            width: Theme.itemSizeSmall
+            height: Theme.itemSizeSmall
+            radius: width / 2
+            color: showPopup ? Theme.highlightColor : "transparent"
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
                 left: parent.left
                 leftMargin: Theme.paddingSmall
             }
-            onClicked: {
-                showPopup = true
-                //console.log("emoji!!")
+
+            Image {
+                id: emojiIcon
+                source: "../icons/emoji-smiley.svg"
+                width: parent.width * 0.6
+                height: parent.height * 0.6
+                anchors.centerIn: parent
+                sourceSize.width: width
+                sourceSize.height: height
+            }
+
+            ColorOverlay {
+                anchors.fill: emojiIcon
+                source: emojiIcon
+                color: showPopup ? Theme.primaryColor : Theme.secondaryColor
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    showPopup = !showPopup
+                }
             }
         }
 
-
-        IconButton {
+        Rectangle {
             id: sendButton
-            width: parent.height - Theme.paddingSmall * 2
-            height: parent.height - Theme.paddingSmall * 2
-            icon.source: "image://theme/icon-m-send?" + (pressed
-                                                         ? Theme.highlightColor
-                                                         : Theme.primaryColor)
+            width: Theme.itemSizeSmall
+            height: Theme.itemSizeSmall
+            radius: width / 2
+            color: Theme.highlightColor
             anchors{
                 top: parent.top
                 topMargin: Theme.paddingSmall
                 left: messageTextField.right
                 leftMargin: Theme.paddingSmall
             }
-            onClicked: {
-                //console.log("text a ", extractTextWithEmojis(messageTextField.text));
-                serverConnection.sendMessage(currentChat, EmojiFunc.extractTextWithEmojis(messageTextField.text))
-                messageTextField.text = ""
+
+            Image {
+                source: "image://theme/icon-m-send"
+                width: parent.width * 0.5
+                height: parent.height * 0.5
+                anchors.centerIn: parent
+                sourceSize.width: width
+                sourceSize.height: height
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    serverConnection.sendMessage(currentChat, EmojiFunc.extractTextWithEmojis(messageTextField.text))
+                    messageTextField.text = ""
+                }
             }
         }
     }
-
 }
