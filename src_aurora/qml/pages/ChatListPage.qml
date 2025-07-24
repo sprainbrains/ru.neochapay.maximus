@@ -54,7 +54,8 @@
 
              onClicked: pageStack.push(Qt.resolvedUrl("ChatPage.qml"), {
                  chatTitle: model.title,
-                 currentChat: chatListModel.get(model.index)
+                 currentChat: chatListModel.get(model.index),
+                 unreadMessagesCount: model.unreadCount !== undefined ? model.unreadCount : 0
              })
          }
 

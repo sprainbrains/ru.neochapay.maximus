@@ -38,6 +38,7 @@ Page {
     }
 
     property var currentChat
+    property var unreadMessagesCount
     property bool showPopup: false
 
     // Background dimmer
@@ -95,6 +96,7 @@ Page {
         onChatLoaded: {
             spinner.enabled = false
             messagesListView.needToUpdate = true
+            messagesListView.scrollToFirstUnread();
         }
     }
 
@@ -143,7 +145,22 @@ Page {
         property bool needToUpdate: true
 
         onCountChanged: {
-            messagesListView.currentIndex = count - 1
+            if (messagesListView.needToUpdate) {
+                messagesListView.scrollToFirstUnread();
+                messagesListView.needToUpdate = false;
+            }
+        }
+
+        function scrollToFirstUnread() {
+            if (unreadMessagesCount > 0 && messagesListView.count > 0) {
+                var targetIndex = messagesListView.count - unreadMessagesCount;
+                if (targetIndex < 0) targetIndex = 0;
+
+                positionViewAtIndex(targetIndex, ListView.Beginning);
+                currentIndex = targetIndex;
+            } else {
+                positionViewAtEnd();
+            }
         }
 
         delegate: Loader{
