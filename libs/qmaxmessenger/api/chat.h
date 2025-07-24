@@ -40,7 +40,7 @@ class Chat : public QObject
     Q_PROPERTY(qint64 newMessagesCount READ newMessagesCount NOTIFY chatChanged)
     Q_PROPERTY(Access access READ access NOTIFY chatChanged FINAL)
 //TODO options
-    Q_PROPERTY(QDateTime modified READ modified NOTIFY chatChanged FINAL)
+    Q_PROPERTY(qint64 modified READ modified NOTIFY chatChanged FINAL)
     Q_PROPERTY(qint64 lastEventTime READ lastEventTime NOTIFY chatChanged FINAL)
 
     Q_PROPERTY(Status status READ status NOTIFY chatChanged FINAL)
@@ -85,7 +85,7 @@ public:
     qint64 chatId() const;
     Status status() const;
     qint64 lastEventTime() const;
-    QDateTime modified() const;
+    qint64 modified() const;
     ChatType type() const;
     QList<ChatMessage*> messages() const;
 
@@ -114,7 +114,7 @@ private:
     qint64 m_chatId;
     Status m_status;
     qint64 m_lastEventTime;
-    QDateTime m_modified;
+    qint64 m_modified;
     ChatType m_type;
     QList<ChatMessage*> m_messages;
     Contact m_owner;

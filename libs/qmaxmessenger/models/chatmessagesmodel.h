@@ -64,6 +64,7 @@ private:
     QList<ChatMessage*> m_messages;
     Chat *m_chat;
     bool m_canFetchMore;
+    qint64 m_firstUnreadMessageTime;
 };
 
 #endif // CHATMESSAGESMODEL_H

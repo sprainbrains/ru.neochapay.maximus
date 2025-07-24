@@ -36,7 +36,7 @@ ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();
     m_text = chatMessageObject["text"].toString();
-    m_messageTime = QDateTime::fromMSecsSinceEpoch(chatMessageObject["time"].toDouble());
+    m_messageTime = chatMessageObject["time"].toDouble();
 
     if(chatMessageObject.contains("link")) {
         QJsonObject chatReply = chatMessageObject["link"].toObject()["message"].toObject();
@@ -122,7 +122,7 @@ qint64 ChatMessage::messageID() const
     return m_messageID;
 }
 
-QDateTime ChatMessage::messageTime() const
+qint64 ChatMessage::messageTime() const
 {
     return m_messageTime;
 }

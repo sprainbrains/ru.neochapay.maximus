@@ -50,7 +50,7 @@ Chat::Chat(QJsonObject jsonObject, QObject *parent)
     m_lastFireDelayedErrorTime = jsonObject["lastFireDelayedErrorTime"].toDouble();
     m_lastDelayedUpdateTime = jsonObject["lastDelayedUpdateTime"].toDouble();
     m_prevMessageId = jsonObject["prevMessageId"].toDouble();
-    m_modified = QDateTime::fromMSecsSinceEpoch(jsonObject["modified"].toDouble() * 1000);
+    m_modified = jsonObject["modified"].toDouble() * 1000;
     m_lastEventTime = jsonObject["lastEventTime"].toDouble();
 
     if(jsonObject["status"].toString() == "ACTIVE") {
@@ -143,7 +143,7 @@ qint64 Chat::lastEventTime() const
     return m_lastEventTime;
 }
 
-QDateTime Chat::modified() const
+qint64 Chat::modified() const
 {
     return m_modified;
 }

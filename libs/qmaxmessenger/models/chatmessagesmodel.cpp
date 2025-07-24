@@ -20,11 +20,13 @@
 #include "chatmessagesmodel.h"
 
 #include <QJsonArray>
+#include <QDateTime>
 
 ChatMessagesModel::ChatMessagesModel(QObject *parent)
     : QAbstractListModel{parent}
     , m_messQueue(MessagesQueue::instance())
     , m_canFetchMore(true)
+    , m_firstUnreadMessageTime(0)
 {
     connect(m_messQueue, &MessagesQueue::messageReceived, this, &ChatMessagesModel::messagesHandler);
 
@@ -66,6 +68,10 @@ void ChatMessagesModel::messagesHandler(RawApiMessage message)
             pushNewMessageToList(message.payload()["message"].toObject());
         }
     }
+
+    if(message.opcode() == 50 ) {
+        m_firstUnreadMessageTime = message.payload()["mark"].toDouble();
+    }
 }
 
 int ChatMessagesModel::rowCount(const QModelIndex &parent) const
@@ -106,7 +112,7 @@ QVariant ChatMessagesModel::data(const QModelIndex &index, int role) const
         }
         return list;
     } else if (role == Qt::UserRole + 8) {
-        return QVariant::fromValue(item->messageTime());
+        return QVariant::fromValue(QDateTime::fromMSecsSinceEpoch(item->messageTime()));
     } else if (role == Qt::UserRole + 9) {
         return item->messageReply() != Q_NULLPTR ? item->messageReply()->messageID() : 0;
     } else if (role == Qt::UserRole + 10) {
@@ -142,7 +148,7 @@ void ChatMessagesModel::fetchMore(const QModelIndex &index)
             return;
         }
 
-        lastEventTime = firstInModel->messageTime().toMSecsSinceEpoch();
+        lastEventTime = firstInModel->messageTime();
     } else {
         lastEventTime = m_chat->lastEventTime();
     }

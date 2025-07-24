@@ -103,7 +103,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ChatPage.qml" line="185"/>
+        <location filename="../qml/pages/ChatPage.qml" line="214"/>
         <source>Type a message...</source>
         <translation type="unfinished"></translation>
     </message>

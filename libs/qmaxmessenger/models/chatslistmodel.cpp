@@ -20,6 +20,7 @@
 #include "chatslistmodel.h"
 
 #include <QJsonArray>
+#include <QDateTime>
 
 ChatsListModel::ChatsListModel(QObject *parent)
     : QAbstractListModel{parent}
@@ -90,7 +91,7 @@ QVariant ChatsListModel::data(const QModelIndex &index, int role) const
     } else if (role == Qt::UserRole + 2) {
         return item->messages().last()->text();
     } else if (role == Qt::UserRole + 3) {
-        return item->messages().last()->messageTime();
+        return QVariant::fromValue(QDateTime::fromMSecsSinceEpoch(item->messages().last()->messageTime()));
     } else if (role == Qt::UserRole + 4) {
         if(item->type() == Chat::CHAT || item->type() == Chat::CHANNEL) {
             return item->baseRawIconUrl();
