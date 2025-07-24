@@ -178,7 +178,7 @@ Item {
                 // reply text
                 Label {
                     id: replyMessageTextLabel
-                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatText(messageText)))
+                    text: EmojiFunc.convertToOriginalHtml(Utils.formatMessagePreview(Utils.formatText(replyMessageText)))
                     visible: text.length > 0
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.secondaryColor
@@ -248,21 +248,37 @@ Item {
 
                     Repeater {
                         model: reactions
-
                         delegate: Rectangle {
                             id: reactionDelegate
-                            height: reactionLabel.height + Theme.paddingSmall
-                            width: reactionLabel.width + Theme.paddingMedium
+                            height: Math.max(reactionLabel.implicitHeight, reactionLabelCount.implicitHeight)
+                            width: reactionLabel.width + reactionLabelCount.width + Theme.paddingLarge
                             radius: height / 2
                             color: Theme.rgba(Theme.secondaryColor, 0.1)
 
+                            Rectangle {
+                				id: spaceFiller
+                				width: reactionsCounter.width
+                				height: Theme.paddingMedium
+                				color: "transparent"
+             			    }
+
                             Label {
                                 id: reactionLabel
-                                text: EmojiFunc.convertToOriginalHtml(modelData.reaction) + " " + modelData.count
+                                text: EmojiFunc.convertToOriginalHtml(modelData.reaction)
                                 font.pixelSize: Theme.fontSizeExtraSmall
-                                anchors.centerIn: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
+            				    anchors.left: parent.left
+            				    anchors.leftMargin: Theme.paddingSmall
+            				    anchors.top: spaceFiller.bottom
+                            }
+
+                            Label {
+                                id: reactionLabelCount
+                                text: modelData.count
+                                font.pixelSize: Theme.fontSizeSmall
+                 			    anchors.right: parent.right
+                 			    anchors.rightMargin: Theme.paddingSmall
+                 			    anchors.top: spaceFiller.bottom
+                 			    anchors.topMargin: Theme.paddingSmall
                             }
                         }
                     }

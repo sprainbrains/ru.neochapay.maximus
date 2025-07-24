@@ -104,10 +104,22 @@ Page {
         iconsType: '.svg'
     }
 
+    Rectangle {
+        id: headerSeparator
+        width: parent.width
+        height: 1
+        color: Theme.rgba(Theme.primaryColor, 0.2)
+        anchors {
+            top: header.bottom
+            left: parent.left
+            right: parent.right
+        }
+    }
+
     SilicaListView {
         id: messagesListView
         anchors {
-            top: header.bottom
+            top: headerSeparator.bottom
             left: parent.left
             right: parent.right
             bottom: sendMessageRow.top
