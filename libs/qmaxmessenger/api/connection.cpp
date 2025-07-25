@@ -23,14 +23,12 @@ Connection::Connection(QObject *parent)
     : QObject(parent)
     , m_connected(false)
 {
-    QNetworkRequest request;
-    request.setUrl(QUrl("wss://ws-api.oneme.ru/websocket"));
-
     connect(&m_webSocket, &QWebSocket::connected, this, &Connection::onConnected);
     connect(&m_webSocket, &QWebSocket::errorOccurred, this, &Connection::onError);
     connect(&m_webSocket, &QWebSocket::disconnected, this, &Connection::onDisconected);
-    m_webSocket.ignoreSslErrors();
-    m_webSocket.open(request);
+    connect(&m_webSocket, &QWebSocket::textMessageReceived, this, &Connection::onTextMessageReceived);
+
+    connectToSocket();
 }
 
 int Connection::sendMessage(RawApiMessage message)
@@ -47,7 +45,6 @@ void Connection::onConnected()
         m_connected = true;
         emit connectedChanged();
     }
-    connect(&m_webSocket, &QWebSocket::textMessageReceived, this, &Connection::onTextMessageReceived);
 }
 
 
@@ -57,6 +54,7 @@ void Connection::onDisconected()
         m_connected = false;
         emit connectedChanged();
     }
+    connectToSocket();
 }
 
 void Connection::onTextMessageReceived(QString messageString)
@@ -72,6 +70,15 @@ void Connection::onError(QAbstractSocket::SocketError error)
 
     qDebug() << Q_FUNC_INFO << m_webSocket.errorString();
     emit errorReceived(m_webSocket.errorString());
+}
+
+void Connection::connectToSocket()
+{
+    QNetworkRequest request;
+    request.setUrl(QUrl("wss://ws-api.oneme.ru/websocket"));
+
+    m_webSocket.ignoreSslErrors();
+    m_webSocket.open(request);
 }
 
 bool Connection::connected() const

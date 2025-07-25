@@ -22,16 +22,16 @@
 
 ChatMessage::ChatMessage(QObject *parent)
     : QObject{parent}
-    , m_messageReply(Q_NULLPTR)
     , m_reactionsCount(0)
+    , m_messageReply(Q_NULLPTR)
 {
 }
 
 ChatMessage::ChatMessage(QJsonObject chatMessageObject, QObject *parent)
     : QObject{parent}
     , m_messageType(UnknowMessageType)
-    , m_messageReply(Q_NULLPTR)
     , m_reactionsCount(0)
+    , m_messageReply(Q_NULLPTR)
 {
     m_sender = new Contact(chatMessageObject["sender"].toInt());
     m_messageID = chatMessageObject["id"].toString().toDouble();

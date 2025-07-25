@@ -39,6 +39,7 @@ signals:
     void readyToSend();
     void connectionClosed();
     void messageReceived(RawApiMessage message);
+    void connectionError();
 
 private slots:
     void onConnectionChanged();

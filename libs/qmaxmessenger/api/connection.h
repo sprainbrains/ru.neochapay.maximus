@@ -48,6 +48,8 @@ private slots:
 private:
     QWebSocket m_webSocket;
     bool m_connected;
+
+    void connectToSocket();
 };
 
 #endif // CONNECTION_H

@@ -30,6 +30,7 @@ MessagesQueue::MessagesQueue(QObject *parent)
     QMutexLocker locker(&m_lock);
     connect(m_connection, &Connection::connectedChanged, this, &MessagesQueue::onConnectionChanged);
     connect(m_connection, &Connection::messageReceived, this, &MessagesQueue::onMessageReceived);
+    connect(m_connection, &Connection::errorReceived, this, &MessagesQueue::connectionError);
 }
 
 MessagesQueue::~MessagesQueue()

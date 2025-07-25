@@ -38,6 +38,7 @@ ServerConnection::ServerConnection(QObject *parent)
     connect(m_messQueue, &MessagesQueue::readyToSend, this, &ServerConnection::init);
     connect(m_messQueue, &MessagesQueue::connectionClosed, m_heartBeatTimer, &QTimer::stop);
     connect(m_messQueue, &MessagesQueue::messageReceived, this, &ServerConnection::onMessageReceived);
+    connect(m_messQueue, &MessagesQueue::connectionError, this, &ServerConnection::connectionError);
 
     connect(m_heartBeatTimer, &QTimer::timeout, this, &ServerConnection::sendHeartBeatMessage);
 }
