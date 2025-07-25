@@ -128,6 +128,7 @@ void ChatsListModel::loadChatsList(QJsonObject payload)
         return;
     }
     beginResetModel();
+    m_chats.clear();
     foreach (QJsonValue cht, chats) {
         Chat* chat = new Chat(cht.toObject());
         m_chats.push_back(chat);

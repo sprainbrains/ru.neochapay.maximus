@@ -46,6 +46,7 @@ signals:
     void readyToLogin();
     void userIdChanged();
     void tokenReady(QString token);
+    void connectionError();
 
 private slots:
     void sendHeartBeatMessage();

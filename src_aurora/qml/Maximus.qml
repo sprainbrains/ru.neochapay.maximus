@@ -41,6 +41,9 @@ ApplicationWindow {
             userSession.storeToken(token)
             pageStack.push(Qt.resolvedUrl("pages/EntherCodePage.qml"))
         }
+        onConnectionError: {
+
+        }
     }
 
     UserSession{
