@@ -4,10 +4,13 @@ CONFIG += \
     auroraapp
 
 INCLUDEPATH += ../libs/qtwebsockets5 \
-               ../libs/qmaxmessenger
+               ../libs/qmaxmessenger \
+               ../libs/libqwebp
 
 LIBS += -L../libs/qtwebsockets5 -lqtwebsockets \
-        -L../libs/qmaxmessenger/ -lqmaxmessenger
+        -L../libs/qmaxmessenger/ -lqmaxmessenger \
+        -L../libs/libqwebp/ -lqwebp \
+        -L../libs/libwebp/ -lwebp \
 
 SOURCES += \
     emojimodel.cpp \
