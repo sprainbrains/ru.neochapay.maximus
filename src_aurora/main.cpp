@@ -28,6 +28,7 @@
 #include "api/chatmessagereactions.h"
 #include "api/chat.h"
 #include "emojimodel.h"
+#include "webpimageprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -45,6 +46,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<EmojiModel>("EmojiModel", 1, 0, "EmojiModel");
 
     QScopedPointer<QQuickView> view(Aurora::Application::createView());
+    view->engine()->addImageProvider("qwebp", new WebpImageProvider);
+
     view->rootContext()->setContextProperty("version", APP_VERSION);
     view->setSource(Aurora::Application::pathTo(QStringLiteral("qml/Maximus.qml")));
     view->show();
