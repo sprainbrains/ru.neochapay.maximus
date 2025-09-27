@@ -76,6 +76,7 @@ void Connection::connectToSocket()
 {
     QNetworkRequest request;
     request.setUrl(QUrl("wss://ws-api.oneme.ru/websocket"));
+    request.setRawHeader("Origin", "https://web.max.ru");
 
     m_webSocket.ignoreSslErrors();
     m_webSocket.open(request);
