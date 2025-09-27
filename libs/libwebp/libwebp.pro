@@ -97,7 +97,9 @@ equals(QT_ARCH, arm)|equals(QT_ARCH, arm64) {
         SOURCES += $$SOURCES_FOR_NEON
     } else {
         neon_comp.commands = $$QMAKE_CC -c $(CFLAGS)
-        neon_comp.commands += $$QMAKE_CFLAGS_NEON
+        !contains(QT_ARCH, arm64) {
+            neon_comp.commands += $$QMAKE_CFLAGS_NEON
+        }
         neon_comp.commands += $(INCPATH) ${QMAKE_FILE_IN}
         msvc: neon_comp.commands += -Fo${QMAKE_FILE_OUT}
         else: neon_comp.commands += -o ${QMAKE_FILE_OUT}
